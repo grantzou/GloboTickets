@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace GloboTickets.Promotion.DataAccess.Entities
 {
@@ -11,5 +12,7 @@ namespace GloboTickets.Promotion.DataAccess.Entities
         public Venue Venue { get; set; }
         public int VenueId { get; set; }
         public DateTimeOffset StartTime { get; set; }
+
+        public ICollection<ShowCancelled> Cancelled { get; set; } = new List<ShowCancelled>();
     }
 }

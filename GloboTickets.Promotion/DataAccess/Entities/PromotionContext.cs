@@ -33,6 +33,9 @@ namespace GloboTickets.Promotion.DataAccess.Entities
             modelBuilder.Entity<Show>()
                 .HasAlternateKey(show => new { show.ActId, show.VenueId, show.StartTime });
 
+            modelBuilder.Entity<ShowCancelled>()
+                .HasAlternateKey(showCancelled => new { showCancelled.ShowId, showCancelled.CancelledDate });
+
             modelBuilder.Entity<Content>()
                 .HasKey(content => content.Hash);
             modelBuilder.Entity<Content>()

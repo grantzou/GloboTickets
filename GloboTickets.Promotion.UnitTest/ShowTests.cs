@@ -43,6 +43,20 @@ namespace GloboTickets.Promotion.UnitTest
             shows.Count.Should().Be(1);
         }
 
+        [Fact]
+        public async Task WhenShowIsCanceled_ShowIsNotReturned()
+        {
+            Guid actGuid = Guid.NewGuid();
+            Guid venueGuid = Guid.NewGuid();
+            DateTimeOffset startTime = new DateTimeOffset(2021, 03, 21, 08, 00, 00, CstOffset);
+            await showCommands.ScheduleShow(actGuid, venueGuid, startTime);
+
+            await showCommands.CancelShow(actGuid, venueGuid, startTime);
+
+            var shows = await showQueries.ListShows();
+            shows.Should().BeEmpty();
+        }
+
         static TimeSpan CstOffset = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time").BaseUtcOffset;
 
         private ShowQueries showQueries;

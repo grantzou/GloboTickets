@@ -18,6 +18,7 @@ namespace GloboTickets.Promotion.DataAccess
         public async Task<List<ShowModel>> ListShows()
         {
             var result = await repository.Show
+                .Where(show => !show.Cancelled.Any())
                 .ToListAsync();
 
             return result.Select(show => new ShowModel
