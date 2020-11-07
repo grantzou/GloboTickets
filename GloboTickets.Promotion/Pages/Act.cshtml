@@ -1,10 +1,10 @@
 ﻿@page "{ShowGuid}"
-@model GloboTickets.Promotion.Pages.ShowModel
+@model GloboTickets.Promotion.Pages.ActModel
 @{
     Layout = "_Layout";
 }
 
-<h1>@(Model.AddShow ? "Add Show" : "Edit Show")</h1>
+<h1>@(Model.AddAct ? "Add Show" : "Edit Show")</h1>
 
 <div class="container-fluid">
     <div class="row">
@@ -32,10 +32,10 @@
                 </div>
                 <input type="hidden" asp-for="ImageHash" />
                 <input type="hidden" asp-for="LastModifiedTicks" />
-                <button type="submit" class="btn btn-primary">@(Model.AddShow ? "Add" : "Save")</button>
-                @if (!Model.AddShow)
+                <button type="submit" class="btn btn-primary">@(Model.AddAct ? "Add" : "Save")</button>
+                @if (!Model.AddAct)
                 {
-                    <a class="btn btn-danger" href="~/ShowRemove/@Model.ShowGuid">Remove</a>
+                    <a class="btn btn-danger" href="~/ShowRemove/@Model.ActGuid">Remove</a>
                 }
                 <a class="btn btn-light" href="~/">Cancel</a>
             </form>

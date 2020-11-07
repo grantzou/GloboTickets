@@ -6,20 +6,20 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace GloboTickets.Promotion.Pages
 {
-    public class ShowRemoveModel : PageModel
+    public class ActRemoveModel : PageModel
     {
-        private readonly ShowQueries showQueries;
+        private readonly ActQueries actQueries;
 
-        private readonly ShowCommands showCommands;
+        private readonly ActCommands actCommands;
 
-        public ShowRemoveModel(ShowQueries showQueries, ShowCommands showCommands)
+        public ActRemoveModel(ActQueries actQueries, ActCommands actCommands)
         {
-            this.showQueries = showQueries;
-            this.showCommands = showCommands;
+            this.actQueries = actQueries;
+            this.actCommands = actCommands;
         }
 
         [BindProperty(SupportsGet=true)]
-        public Guid ShowGuid { get; set; }
+        public Guid ActGuid { get; set; }
 
         public string Title { get; set; }
         public DateTime Date { get; set; } = DateTime.Now;
@@ -29,21 +29,21 @@ namespace GloboTickets.Promotion.Pages
 
         public async Task<IActionResult> OnGet()
         {
-            var show = await showQueries.GetShow(ShowGuid);
+            var act = await actQueries.GetAct(ActGuid);
 
-            if (show == null)
+            if (act == null)
             {
                 return NotFound();
             }
             else
             {
-                if (show.Description != null)
+                if (act.Description != null)
                 {
-                    Title = show.Description.Title;
-                    Date = show.Description.Date.ToLocalTime();
-                    City = show.Description.City;
-                    Venue = show.Description.Venue;
-                    ImageHash = show.Description.ImageHash;
+                    Title = act.Description.Title;
+                    Date = act.Description.Date.ToLocalTime();
+                    City = act.Description.City;
+                    Venue = act.Description.Venue;
+                    ImageHash = act.Description.ImageHash;
                 }
                 return Page();
             }
@@ -51,7 +51,7 @@ namespace GloboTickets.Promotion.Pages
 
         public async Task<IActionResult> OnPost()
         {
-            await showCommands.RemoveShow(ShowGuid);
+            await actCommands.RemoveAct(ActGuid);
             return Redirect("~/");
         }
     }

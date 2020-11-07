@@ -10,25 +10,25 @@ using System.Threading.Tasks;
 
 namespace GloboTickets.Promotion.Pages
 {
-    public class ShowModel : PageModel
+    public class ActModel : PageModel
     {
-        private readonly ShowQueries showQueries;
-        private readonly ShowCommands showCommands;
+        private readonly ActQueries actQueries;
+        private readonly ActCommands actCommands;
         private readonly ContentQueries contentQueries;
         private readonly ContentCommands contentCommands;
 
-        public ShowModel(ShowQueries showQueries, ShowCommands showCommands, ContentQueries contentQueries, ContentCommands contentCommands)
+        public ActModel(ActQueries actQueries, ActCommands actCommands, ContentQueries contentQueries, ContentCommands contentCommands)
         {
-            this.showQueries = showQueries;
-            this.showCommands = showCommands;
+            this.actQueries = actQueries;
+            this.actCommands = actCommands;
             this.contentQueries = contentQueries;
             this.contentCommands = contentCommands;
         }
 
         [BindProperty(SupportsGet=true)]
-        public Guid ShowGuid { get; set; }
+        public Guid ActGuid { get; set; }
 
-        public bool AddShow { get; set; }
+        public bool AddAct { get; set; }
 
         [BindProperty]
         public string Title { get; set; }
@@ -48,23 +48,23 @@ namespace GloboTickets.Promotion.Pages
 
         public async Task OnGet()
         {
-            var show = await showQueries.GetShow(ShowGuid);
+            var act = await actQueries.GetAct(ActGuid);
 
-            if (show == null)
+            if (act == null)
             {
-                AddShow = true;
+                AddAct = true;
             }
             else
             {
-                AddShow = false;
-                if (show.Description != null)
+                AddAct = false;
+                if (act.Description != null)
                 {
-                    Title = show.Description.Title;
-                    Date = show.Description.Date.ToLocalTime();
-                    City = show.Description.City;
-                    Venue = show.Description.Venue;
-                    ImageHash = show.Description.ImageHash;
-                    LastModifiedTicks = show.Description.LastModifiedTicks;
+                    Title = act.Description.Title;
+                    Date = act.Description.Date.ToLocalTime();
+                    City = act.Description.City;
+                    Venue = act.Description.Venue;
+                    ImageHash = act.Description.ImageHash;
+                    LastModifiedTicks = act.Description.LastModifiedTicks;
                 }
             }
         }
@@ -75,7 +75,7 @@ namespace GloboTickets.Promotion.Pages
 
             try
             {
-                await showCommands.SetShowDescription(ShowGuid, new ShowDescriptionModel
+                await actCommands.SetActDescription(ActGuid, new ActDescriptionModel
                 {
                     Title = Title,
                     Date = Date.ToUniversalTime(),

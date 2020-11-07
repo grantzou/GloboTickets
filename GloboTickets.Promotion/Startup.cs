@@ -30,8 +30,8 @@ namespace GloboTickets.Promotion
             services.AddControllers();
             services.AddRazorPages();
 
-            services.AddScoped<ShowQueries>();
-            services.AddScoped<ShowCommands>();
+            services.AddScoped<ActQueries>();
+            services.AddScoped<ActCommands>();
             services.AddScoped<ContentQueries>();
             services.AddScoped<ContentCommands>();
         }

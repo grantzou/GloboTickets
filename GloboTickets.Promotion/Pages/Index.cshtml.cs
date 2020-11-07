@@ -1,5 +1,4 @@
 using GloboTickets.Promotion.DataAccess;
-using GloboTickets.Promotion.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,18 +7,18 @@ namespace GloboTickets.Promotion.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ShowQueries showQueries;
+        private readonly ActQueries actQueries;
 
-        public IndexModel(ShowQueries showQueries)
+        public IndexModel(ActQueries actQueries)
         {
-            this.showQueries = showQueries;
+            this.actQueries = actQueries;
         }
 
-        public List<Models.ShowModel> Shows { get; set; }
+        public List<Models.ActModel> Acts { get; set; }
 
         public async Task OnGetAsync()
         {
-            Shows = await showQueries.ListShows();
+            Acts = await actQueries.ListActs();
         }
     }
 }

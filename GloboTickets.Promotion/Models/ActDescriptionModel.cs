@@ -2,7 +2,7 @@
 
 namespace GloboTickets.Promotion.Models
 {
-    public class ShowDescriptionModel
+    public class ActDescriptionModel
     {
         public string Title { get; set; }
         public DateTime Date { get; set; }

@@ -8,19 +8,19 @@ namespace GloboTickets.Promotion.DataAccess.Entities
         {
         }
 
-        public DbSet<Show> Show { get; set; }
+        public DbSet<Act> Act { get; set; }
         public DbSet<Content> Content { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Show>()
-                .HasAlternateKey(show => new { show.ShowGuid });
+            modelBuilder.Entity<Act>()
+                .HasAlternateKey(act => new { act.ActGuid });
 
-            modelBuilder.Entity<ShowRemoved>()
-                .HasAlternateKey(showRemoved => new { showRemoved.ShowId, showRemoved.RemovedDate });
+            modelBuilder.Entity<ActRemoved>()
+                .HasAlternateKey(actRemoved => new { actRemoved.ActId, actRemoved.RemovedDate });
 
-            modelBuilder.Entity<ShowDescription>()
-                .HasAlternateKey(showDescription => new { showDescription.ShowId, showDescription.ModifiedDate });
+            modelBuilder.Entity<ActDescription>()
+                .HasAlternateKey(actDescription => new { actDescription.ActId, actDescription.ModifiedDate });
 
             modelBuilder.Entity<Content>()
                 .HasKey(content => content.Hash);

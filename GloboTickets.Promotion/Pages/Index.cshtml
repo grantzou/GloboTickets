@@ -10,7 +10,7 @@
 <a type="button" class="btn btn-primary" href="~/Show/@Guid.NewGuid().ToString()">Add Show</a>
 
 <div class="d-flex show-container">
-    @foreach (var show in Model.Shows)
+    @foreach (var show in Model.Acts)
     {
         if (show.Description == null)
         {
@@ -20,7 +20,7 @@
                     <h5 class="card-title">New Show</h5>
                 </div>
                 <div class="card-footer">
-                    <a href="~/Show/@show.ShowGuid" class="btn btn-primary">Edit</a>
+                    <a href="~/Show/@show.ActGuid" class="btn btn-primary">Edit</a>
                 </div>
             </div>
         }
@@ -35,8 +35,8 @@
                     <p class="card-text">@show.Description.Date.ToShortDateString()</p>
                 </div>
                 <div class="card-footer">
-                    <a href="~/Show/@show.ShowGuid" class="btn btn-primary">Edit</a>
-                    <a href="~/ShowRemove/@show.ShowGuid" class="btn btn-danger">Remove</a>
+                    <a href="~/Show/@show.ActGuid" class="btn btn-primary">Edit</a>
+                    <a href="~/ShowRemove/@show.ActGuid" class="btn btn-danger">Remove</a>
                 </div>
             </div>
         }

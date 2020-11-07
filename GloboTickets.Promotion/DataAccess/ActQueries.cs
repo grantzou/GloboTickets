@@ -8,18 +8,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GloboTickets.Promotion.DataAccess
 {
-    public class ShowQueries
+    public class ActQueries
     {
         private readonly PromotionContext repository;
 
-        public ShowQueries(PromotionContext repository)
+        public ActQueries(PromotionContext repository)
         {
             this.repository = repository;
         }
 
-        public async Task<List<ShowModel>> ListShows()
+        public async Task<List<ActModel>> ListActs()
         {
-            var result = await repository.Show
+            var result = await repository.Act
                 .Where(show => !show.Removed.Any())
                 .Select(show => new
                 {
@@ -31,18 +31,18 @@ namespace GloboTickets.Promotion.DataAccess
                 .ToListAsync();
 
             return result
-                .Select(row => new ShowModel
+                .Select(row => new ActModel
                 {
-                    ShowGuid = row.Show.ShowGuid,
-                    Description = MapShowDescription(row.Description)
+                    ActGuid = row.Show.ActGuid,
+                    Description = MapActDescription(row.Description)
                 })
                 .ToList();
         }
 
-        public async Task<ShowModel> GetShow(Guid showGuid)
+        public async Task<ActModel> GetAct(Guid actGuid)
         {
-            var result = await repository.Show
-                .Where(show => show.ShowGuid == showGuid)
+            var result = await repository.Act
+                .Where(show => show.ActGuid == actGuid)
                 .Select(show => new
                 {
                     Show = show,
@@ -52,23 +52,23 @@ namespace GloboTickets.Promotion.DataAccess
                 })
                 .SingleOrDefaultAsync();
 
-            return result == null ? null : new ShowModel
+            return result == null ? null : new ActModel
             {
-                ShowGuid = result.Show.ShowGuid,
-                Description = MapShowDescription(result.Description)
+                ActGuid = result.Show.ActGuid,
+                Description = MapActDescription(result.Description)
             };
         }
 
-        private static ShowDescriptionModel MapShowDescription(ShowDescription showDescription)
+        private static ActDescriptionModel MapActDescription(ActDescription actDescription)
         {
-            return showDescription == null ? null : new ShowDescriptionModel
+            return actDescription == null ? null : new ActDescriptionModel
             {
-                Title = showDescription.Title,
-                Date = showDescription.Date,
-                City = showDescription.City,
-                Venue = showDescription.Venue,
-                ImageHash = showDescription.ImageHash,
-                LastModifiedTicks = showDescription.ModifiedDate.Ticks
+                Title = actDescription.Title,
+                Date = actDescription.Date,
+                City = actDescription.City,
+                Venue = actDescription.Venue,
+                ImageHash = actDescription.ImageHash,
+                LastModifiedTicks = actDescription.ModifiedDate.Ticks
             };
         }
     }

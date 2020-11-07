@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GloboTickets.Promotion.DataAccess.Entities
 {
-    public class ShowDescription
+    public class ActDescription
     {
-        public int ShowDescriptionId { get; set; }
+        public int ActDescriptionId { get; set; }
 
-        public Show Show { get; set; }
-        public int ShowId { get; set; }
+        public Act Act { get; set; }
+        public int ActId { get; set; }
         public DateTime ModifiedDate { get; set; }
 
         [MaxLength(100)]
