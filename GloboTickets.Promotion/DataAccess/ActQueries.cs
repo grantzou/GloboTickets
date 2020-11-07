@@ -20,11 +20,11 @@ namespace GloboTickets.Promotion.DataAccess
         public async Task<List<ActModel>> ListActs()
         {
             var result = await repository.Act
-                .Where(show => !show.Removed.Any())
-                .Select(show => new
+                .Where(act => !act.Removed.Any())
+                .Select(act => new
                 {
-                    Show = show,
-                    Description = show.Descriptions
+                    Show = act,
+                    Description = act.Descriptions
                         .OrderByDescending(d => d.ModifiedDate)
                         .FirstOrDefault()
                 })
@@ -42,11 +42,11 @@ namespace GloboTickets.Promotion.DataAccess
         public async Task<ActModel> GetAct(Guid actGuid)
         {
             var result = await repository.Act
-                .Where(show => show.ActGuid == actGuid)
-                .Select(show => new
+                .Where(act => act.ActGuid == actGuid)
+                .Select(act => new
                 {
-                    Show = show,
-                    Description = show.Descriptions
+                    Show = act,
+                    Description = act.Descriptions
                         .OrderByDescending(d => d.ModifiedDate)
                         .FirstOrDefault()
                 })

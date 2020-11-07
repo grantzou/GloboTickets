@@ -18,13 +18,13 @@ namespace GloboTickets.Promotion.DataAccess
 
         public async Task AddAct(Guid actGuid)
         {
-            await GetOrInsertAct(actGuid);
+            await repository.GetOrInsertAct(actGuid);
             await repository.SaveChangesAsync();
         }
 
         public async Task RemoveAct(Guid actGuid)
         {
-            var act = await GetOrInsertAct(actGuid);
+            var act = await repository.GetOrInsertAct(actGuid);
             await repository.AddAsync(new ActRemoved
             {
                 Act = act,
@@ -35,7 +35,7 @@ namespace GloboTickets.Promotion.DataAccess
 
         public async Task SetActDescription(Guid actGuid, ActDescriptionModel actDescriptionModel)
         {
-            var act = await GetOrInsertAct(actGuid);
+            var act = await repository.GetOrInsertAct(actGuid);
             var lastActDescription = act.Descriptions
                 .OrderByDescending(description => description.ModifiedDate)
                 .FirstOrDefault();
@@ -75,24 +75,6 @@ namespace GloboTickets.Promotion.DataAccess
                 case null:
                     return 0;
             }
-        }
-
-        private async Task<Act> GetOrInsertAct(Guid actGuid)
-        {
-            var show = repository.Act
-                .Include(show => show.Descriptions)
-                .Where(show => show.ActGuid == actGuid)
-                .SingleOrDefault();
-            if (show == null)
-            {
-                show = new Act
-                {
-                    ActGuid = actGuid
-                };
-                await repository.AddAsync(show);
-            }
-
-            return show;
         }
     }
 }
