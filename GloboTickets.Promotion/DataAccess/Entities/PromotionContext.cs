@@ -31,7 +31,7 @@ namespace GloboTickets.Promotion.DataAccess.Entities
                 .HasAlternateKey(venue => new { venue.VenueGuid });
 
             modelBuilder.Entity<Show>()
-                .HasAlternateKey(show => new { show.ShowId });
+                .HasAlternateKey(show => new { show.ActId, show.VenueId, show.StartTime });
 
             modelBuilder.Entity<Content>()
                 .HasKey(content => content.Hash);
@@ -73,6 +73,28 @@ namespace GloboTickets.Promotion.DataAccess.Entities
             }
 
             return venue;
+        }
+
+        public async Task<Show> GetOrInsertShow(Guid actGuid, Guid venueGuid, DateTimeOffset startTime)
+        {
+            var show = Show
+                .Where(show =>
+                    show.Act.ActGuid == actGuid &&
+                    show.Venue.VenueGuid == venueGuid &&
+                    show.StartTime == startTime)
+                .SingleOrDefault();
+            if (show == null)
+            {
+                show = new Show
+                {
+                    Act = await GetOrInsertAct(actGuid),
+                    Venue = await GetOrInsertVenue(venueGuid),
+                    StartTime = startTime
+                };
+                await base.AddAsync(show);
+            }
+
+            return show;
         }
     }
 }

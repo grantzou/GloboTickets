@@ -15,12 +15,7 @@ namespace GloboTickets.Promotion
 
         public async Task ScheduleShow(Guid actGuid, Guid venueGuid, DateTimeOffset startTime)
         {
-            await repository.AddAsync(new Show
-            {
-                Act = await repository.GetOrInsertAct(actGuid),
-                Venue = await repository.GetOrInsertVenue(venueGuid),
-                StartTime = startTime
-            });
+            await repository.GetOrInsertShow(actGuid, venueGuid, startTime);
             await repository.SaveChangesAsync();
         }
     }
