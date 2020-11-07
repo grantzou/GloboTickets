@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GloboTickets.Promotion", "GloboTickets.Promotion\GloboTickets.Promotion.csproj", "{EE242430-8704-4794-9FF7-3EC330434DF7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GloboTickets.Promotion.UnitTest", "GloboTickets.Promotion.UnitTest\GloboTickets.Promotion.UnitTest.csproj", "{0F7513D8-8FD4-43C6-9D7B-B31CDD125F2C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,17 @@ Global
 		{EE242430-8704-4794-9FF7-3EC330434DF7}.Release|x64.Build.0 = Release|Any CPU
 		{EE242430-8704-4794-9FF7-3EC330434DF7}.Release|x86.ActiveCfg = Release|Any CPU
 		{EE242430-8704-4794-9FF7-3EC330434DF7}.Release|x86.Build.0 = Release|Any CPU
+		{0F7513D8-8FD4-43C6-9D7B-B31CDD125F2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F7513D8-8FD4-43C6-9D7B-B31CDD125F2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F7513D8-8FD4-43C6-9D7B-B31CDD125F2C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0F7513D8-8FD4-43C6-9D7B-B31CDD125F2C}.Debug|x64.Build.0 = Debug|Any CPU
+		{0F7513D8-8FD4-43C6-9D7B-B31CDD125F2C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0F7513D8-8FD4-43C6-9D7B-B31CDD125F2C}.Debug|x86.Build.0 = Debug|Any CPU
+		{0F7513D8-8FD4-43C6-9D7B-B31CDD125F2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F7513D8-8FD4-43C6-9D7B-B31CDD125F2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F7513D8-8FD4-43C6-9D7B-B31CDD125F2C}.Release|x64.ActiveCfg = Release|Any CPU
+		{0F7513D8-8FD4-43C6-9D7B-B31CDD125F2C}.Release|x64.Build.0 = Release|Any CPU
+		{0F7513D8-8FD4-43C6-9D7B-B31CDD125F2C}.Release|x86.ActiveCfg = Release|Any CPU
+		{0F7513D8-8FD4-43C6-9D7B-B31CDD125F2C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
