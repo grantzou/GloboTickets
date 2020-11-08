@@ -16,28 +16,23 @@ namespace GloboTickets.Promotion.DataAccess
             this.repository = repository;
         }
 
-        public async Task AddVenue(Guid venueGuid)
-        {
-            await repository.GetOrInsertVenue(venueGuid);
-            await repository.SaveChangesAsync();
-        }
-
         public async Task SaveVenue(VenueModel venueModel)
         {
             var venue = await repository.GetOrInsertVenue(venueModel.VenueGuid);
             var lastVenueDescription = venue.Descriptions
                 .OrderByDescending(description => description.ModifiedDate)
                 .FirstOrDefault();
-            var modifiedTicks = lastVenueDescription?.ModifiedDate.Ticks ?? 0;
-            if (modifiedTicks != venueModel.LastModifiedTicks)
-            {
-                throw new DbUpdateConcurrencyException("A new update has occurred since you loaded the page. Please refresh and try again.");
-            }
 
             if (lastVenueDescription == null ||
                 lastVenueDescription.Name != venueModel.Name ||
                 lastVenueDescription.City != venueModel.City)
             {
+                var modifiedTicks = lastVenueDescription?.ModifiedDate.Ticks ?? 0;
+                if (modifiedTicks != venueModel.LastModifiedTicks)
+                {
+                    throw new DbUpdateConcurrencyException("A new update has occurred since you loaded the page. Please refresh and try again.");
+                }
+
                 await repository.AddAsync(new VenueDescription
                 {
                     ModifiedDate = DateTime.UtcNow,

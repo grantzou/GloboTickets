@@ -25,7 +25,7 @@ namespace GloboTickets.Promotion.UnitTest
         public async Task WhenAddVenue_VenueIsReturned()
         {
             var venueGuid = Guid.NewGuid();
-            await venueCommands.AddVenue(venueGuid);
+            await venueCommands.SaveVenue(VenueModelWith(venueGuid, "American Airlines Center"));
 
             var venues = await venueQueries.ListVenues();
             venues.Should().Contain(venue => venue.VenueGuid == venueGuid);
@@ -35,8 +35,8 @@ namespace GloboTickets.Promotion.UnitTest
         public async Task WhenAddVenueTwice_OneVenueIsAdded()
         {
             var venueGuid = Guid.NewGuid();
-            await venueCommands.AddVenue(venueGuid);
-            await venueCommands.AddVenue(venueGuid);
+            await venueCommands.SaveVenue(VenueModelWith(venueGuid, "American Airlines Center"));
+            await venueCommands.SaveVenue(VenueModelWith(venueGuid, "American Airlines Center"));
 
             var venues = await venueQueries.ListVenues();
             venues.Count.Should().Be(1);
@@ -46,16 +46,21 @@ namespace GloboTickets.Promotion.UnitTest
         public async Task WhenSetVenueDescription_VenueDescriptionIsReturned()
         {
             var venueGuid = Guid.NewGuid();
-            await venueCommands.SaveVenue(new VenueModel
-            {
-                VenueGuid = venueGuid,
-                Name = "American Airlines Center",
-                City = "Dallas, TX",
-                LastModifiedTicks = 0
-            });
+            await venueCommands.SaveVenue(VenueModelWith(venueGuid, "American Airlines Center"));
 
             var venue = await venueQueries.GetVenue(venueGuid);
             venue.Name.Should().Be("American Airlines Center");
+        }
+
+        private static VenueModel VenueModelWith(Guid venueGuid, string name, long lastModifiedTicks = 0)
+        {
+            return new VenueModel
+            {
+                VenueGuid = venueGuid,
+                Name = name,
+                City = "Dallas, TX",
+                LastModifiedTicks = lastModifiedTicks
+            };
         }
 
         private VenueQueries venueQueries;
