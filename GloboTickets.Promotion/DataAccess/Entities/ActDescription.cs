@@ -12,6 +12,7 @@ namespace GloboTickets.Promotion.DataAccess.Entities
         public DateTime ModifiedDate { get; set; }
 
         [MaxLength(100)]
+        [Required]
         public string Title { get; set; }
         [MaxLength(88)]
         public string ImageHash { get; set; }

@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace GloboTickets.Promotion.Test
+namespace GloboTickets.Promotion.UnitTest
 {
     public class ActTests
     {
@@ -86,7 +86,7 @@ namespace GloboTickets.Promotion.Test
             await actCommands.SetActDescription(actGuid, ActDescriptionWith("Gabriel Iglesias"));
             var versionOne = await actQueries.GetAct(actGuid);
             await actCommands.SetActDescription(actGuid, ActDescriptionWith("Jeff Dunham", versionOne.Description.LastModifiedTicks));
-            
+
             Func<Task> update = async () =>
             {
                 await actCommands.SetActDescription(actGuid, ActDescriptionWith("Jeff Foxworthy", versionOne.Description.LastModifiedTicks));
