@@ -51,12 +51,9 @@ namespace GloboTickets.Promotion.Pages
             else
             {
                 AddAct = false;
-                if (act.Description != null)
-                {
-                    Title = act.Description.Title;
-                    ImageHash = act.Description.ImageHash;
-                    LastModifiedTicks = act.Description.LastModifiedTicks;
-                }
+                Title = act.Title;
+                ImageHash = act.ImageHash;
+                LastModifiedTicks = act.LastModifiedTicks;
             }
         }
 
@@ -66,8 +63,9 @@ namespace GloboTickets.Promotion.Pages
 
             try
             {
-                await actCommands.SetActDescription(ActGuid, new ActDescriptionModel
+                await actCommands.SaveAct(new Models.ActModel
                 {
+                    ActGuid = ActGuid,
                     Title = Title,
                     ImageHash = imageHash,
                     LastModifiedTicks = LastModifiedTicks

@@ -33,41 +33,30 @@ namespace GloboTickets.Promotion.DataAccess
             await repository.SaveChangesAsync();
         }
 
-        public async Task SetActDescription(Guid actGuid, ActDescriptionModel actDescriptionModel)
+        public async Task SaveAct(ActModel actModel)
         {
-            var act = await repository.GetOrInsertAct(actGuid);
+            var act = await repository.GetOrInsertAct(actModel.ActGuid);
             var lastActDescription = act.Descriptions
                 .OrderByDescending(description => description.ModifiedDate)
                 .FirstOrDefault();
-            var modifiedTicks = ToTicks(lastActDescription?.ModifiedDate);
-            if (modifiedTicks != actDescriptionModel.LastModifiedTicks)
+            var modifiedTicks = lastActDescription?.ModifiedDate.Ticks ?? 0;
+            if (modifiedTicks != actModel.LastModifiedTicks)
             {
                 throw new DbUpdateConcurrencyException("A new update has occurred since you loaded the page. Please refresh and try again.");
             }
 
             if (lastActDescription == null ||
-                lastActDescription.Title != actDescriptionModel.Title ||
-                lastActDescription.ImageHash != actDescriptionModel.ImageHash)
+                lastActDescription.Title != actModel.Title ||
+                lastActDescription.ImageHash != actModel.ImageHash)
             {
                 await repository.AddAsync(new ActDescription
                 {
                     ModifiedDate = DateTime.UtcNow,
                     Act = act,
-                    Title = actDescriptionModel.Title,
-                    ImageHash = actDescriptionModel.ImageHash
+                    Title = actModel.Title,
+                    ImageHash = actModel.ImageHash
                 });
                 await repository.SaveChangesAsync();
-            }
-        }
-
-        private long ToTicks(DateTime? optionalDate)
-        {
-            switch (optionalDate)
-            {
-                case DateTime date:
-                    return date.Ticks;
-                case null:
-                    return 0;
             }
         }
     }

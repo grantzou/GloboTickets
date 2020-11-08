@@ -34,11 +34,8 @@ namespace GloboTickets.Promotion.Pages
             }
             else
             {
-                if (act.Description != null)
-                {
-                    Title = act.Description.Title;
-                    ImageHash = act.Description.ImageHash;
-                }
+                Title = act.Title;
+                ImageHash = act.ImageHash;
                 return Page();
             }
         }

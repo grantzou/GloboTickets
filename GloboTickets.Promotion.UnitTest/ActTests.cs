@@ -46,50 +46,47 @@ namespace GloboTickets.Promotion.UnitTest
         public async Task WhenSetActDescription_ActDescriptionIsReturned()
         {
             var actGuid = Guid.NewGuid();
-            await actCommands.AddAct(actGuid);
-            await actCommands.SetActDescription(actGuid, ActDescriptionWith("Gabriel Iglesias"));
+            await actCommands.SaveAct(ActModelWith(actGuid, "Gabriel Iglesias"));
 
             var act = await actQueries.GetAct(actGuid);
-            act.Description.Title.Should().Be("Gabriel Iglesias");
+            act.Title.Should().Be("Gabriel Iglesias");
         }
 
         [Fact]
         public async Task WhenChangeActDescription_ActDescriptionIsModified()
         {
             var actGuid = Guid.NewGuid();
-            await actCommands.AddAct(actGuid);
-            await actCommands.SetActDescription(actGuid, ActDescriptionWith("Gabriel Iglesias"));
+            await actCommands.SaveAct(ActModelWith(actGuid, "Gabriel Iglesias"));
             var versionOne = await actQueries.GetAct(actGuid);
-            await actCommands.SetActDescription(actGuid, ActDescriptionWith("Jeff Dunham", versionOne.Description.LastModifiedTicks));
+            await actCommands.SaveAct(ActModelWith(actGuid, "Jeff Dunham", versionOne.LastModifiedTicks));
 
             var act = await actQueries.GetAct(actGuid);
-            act.Description.Title.Should().Be("Jeff Dunham");
+            act.Title.Should().Be("Jeff Dunham");
         }
 
         [Fact]
         public async Task WhenActDescriptionIsTheSame_ActDescriptionIsNotModified()
         {
             var actGuid = Guid.NewGuid();
-            await actCommands.AddAct(actGuid);
-            await actCommands.SetActDescription(actGuid, ActDescriptionWith("Gabriel Iglesias"));
+            await actCommands.SaveAct(ActModelWith(actGuid, "Gabriel Iglesias"));
             var versionOne = await actQueries.GetAct(actGuid);
-            await actCommands.SetActDescription(actGuid, ActDescriptionWith("Gabriel Iglesias", versionOne.Description.LastModifiedTicks));
+            await actCommands.SaveAct(ActModelWith(actGuid, "Gabriel Iglesias", versionOne.LastModifiedTicks));
 
             var act = await actQueries.GetAct(actGuid);
-            act.Description.LastModifiedTicks.Should().Be(versionOne.Description.LastModifiedTicks);
+            act.LastModifiedTicks.Should().Be(versionOne.LastModifiedTicks);
         }
 
         [Fact]
         public async Task WhenBasedOnOldVersion_ChangeIsRejected()
         {
             var actGuid = Guid.NewGuid();
-            await actCommands.SetActDescription(actGuid, ActDescriptionWith("Gabriel Iglesias"));
+            await actCommands.SaveAct(ActModelWith(actGuid, "Gabriel Iglesias"));
             var versionOne = await actQueries.GetAct(actGuid);
-            await actCommands.SetActDescription(actGuid, ActDescriptionWith("Jeff Dunham", versionOne.Description.LastModifiedTicks));
+            await actCommands.SaveAct(ActModelWith(actGuid, "Jeff Dunham", versionOne.LastModifiedTicks));
 
             Func<Task> update = async () =>
             {
-                await actCommands.SetActDescription(actGuid, ActDescriptionWith("Jeff Foxworthy", versionOne.Description.LastModifiedTicks));
+                await actCommands.SaveAct(ActModelWith(actGuid, "Jeff Foxworthy", versionOne.LastModifiedTicks));
             };
             update.Should().Throw<DbUpdateConcurrencyException>();
         }
@@ -98,10 +95,10 @@ namespace GloboTickets.Promotion.UnitTest
         public async Task GivenActDoesNotExist_WhenSetActDescription_ActIsCreated()
         {
             var actGuid = Guid.NewGuid();
-            await actCommands.SetActDescription(actGuid, ActDescriptionWith("Gabriel Iglesias"));
+            await actCommands.SaveAct(ActModelWith(actGuid, "Gabriel Iglesias"));
 
             var act = await actQueries.GetAct(actGuid);
-            act.Description.Title.Should().Be("Gabriel Iglesias");
+            act.Title.Should().Be("Gabriel Iglesias");
         }
 
         [Fact]
@@ -115,18 +112,19 @@ namespace GloboTickets.Promotion.UnitTest
             acts.Should().BeEmpty();
         }
 
-        private static ActDescriptionModel ActDescriptionWith(string title, long lastModifiedTicks = 0)
+        private ActModel ActModelWith(Guid actGuid, string title, long lastModifiedTicks = 0)
         {
             var sha512 = HashAlgorithm.Create(HashAlgorithmName.SHA512.Name);
             var imageHash = sha512.ComputeHash(Encoding.UTF8.GetBytes(title));
 
-            ActDescriptionModel actDescription = new ActDescriptionModel
+            var actModel = new ActModel
             {
+                ActGuid = actGuid,
                 Title = title,
                 ImageHash = Convert.ToBase64String(imageHash),
                 LastModifiedTicks = lastModifiedTicks
             };
-            return actDescription;
+            return actModel;
         }
 
         private ActQueries actQueries;

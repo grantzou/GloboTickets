@@ -12,31 +12,16 @@
 <div class="d-flex show-container">
     @foreach (var show in Model.Acts)
     {
-        if (show.Description == null)
-        {
-            <div class="card show-item">
-                <img src="~/images/NewShow.jpg" class="card-img-top" alt="New Show">
-                <div class="card-body">
-                    <h5 class="card-title">New Show</h5>
-                </div>
-                <div class="card-footer">
-                    <a href="~/Show/@show.ActGuid" class="btn btn-primary">Edit</a>
-                </div>
+        <div class="card show-item">
+            <img src="@Url.Content(show.ImageHash == null ? "~/images/NoImage.jpg" : $"~/content/{Uri.EscapeDataString(show.ImageHash)}")" class="card-img-top" alt="@show.Title">
+            <div class="card-body">
+                <h5 class="card-title">@show.Title</h5>
             </div>
-        }
-        else
-        {
-            <div class="card show-item">
-                <img src="@Url.Content(show.Description.ImageHash == null ? "~/images/NoImage.jpg" : $"~/content/{Uri.EscapeDataString(show.Description.ImageHash)}")" class="card-img-top" alt="@show.Description.Title">
-                <div class="card-body">
-                    <h5 class="card-title">@show.Description.Title</h5>
-                </div>
-                <div class="card-footer">
-                    <a href="~/Show/@show.ActGuid" class="btn btn-primary">Edit</a>
-                    <a href="~/ShowRemove/@show.ActGuid" class="btn btn-danger">Remove</a>
-                </div>
+            <div class="card-footer">
+                <a href="~/Show/@show.ActGuid" class="btn btn-primary">Edit</a>
+                <a href="~/ShowRemove/@show.ActGuid" class="btn btn-danger">Remove</a>
             </div>
-        }
+        </div>
     }
 </div>
 

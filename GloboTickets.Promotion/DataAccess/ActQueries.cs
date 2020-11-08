@@ -23,7 +23,7 @@ namespace GloboTickets.Promotion.DataAccess
                 .Where(act => !act.Removed.Any())
                 .Select(act => new
                 {
-                    Show = act,
+                    ActGuid = act.ActGuid,
                     Description = act.Descriptions
                         .OrderByDescending(d => d.ModifiedDate)
                         .FirstOrDefault()
@@ -31,11 +31,7 @@ namespace GloboTickets.Promotion.DataAccess
                 .ToListAsync();
 
             return result
-                .Select(row => new ActModel
-                {
-                    ActGuid = row.Show.ActGuid,
-                    Description = MapActDescription(row.Description)
-                })
+                .Select(row => MapActModel(row.ActGuid, row.Description))
                 .ToList();
         }
 
@@ -45,27 +41,24 @@ namespace GloboTickets.Promotion.DataAccess
                 .Where(act => act.ActGuid == actGuid)
                 .Select(act => new
                 {
-                    Show = act,
+                    ActGuid = act.ActGuid,
                     Description = act.Descriptions
                         .OrderByDescending(d => d.ModifiedDate)
                         .FirstOrDefault()
                 })
                 .SingleOrDefaultAsync();
 
-            return result == null ? null : new ActModel
-            {
-                ActGuid = result.Show.ActGuid,
-                Description = MapActDescription(result.Description)
-            };
+            return result == null ? null : MapActModel(result.ActGuid, result.Description);
         }
 
-        private static ActDescriptionModel MapActDescription(ActDescription actDescription)
+        private static ActModel MapActModel(Guid actGuid, ActDescription actDescription)
         {
-            return actDescription == null ? null : new ActDescriptionModel
+            return new ActModel
             {
-                Title = actDescription.Title,
-                ImageHash = actDescription.ImageHash,
-                LastModifiedTicks = actDescription.ModifiedDate.Ticks
+                ActGuid = actGuid,
+                Title = actDescription?.Title,
+                ImageHash = actDescription?.ImageHash,
+                LastModifiedTicks = actDescription?.ModifiedDate.Ticks ?? 0
             };
         }
     }

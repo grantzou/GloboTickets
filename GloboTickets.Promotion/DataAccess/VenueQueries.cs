@@ -22,7 +22,7 @@ namespace GloboTickets.Promotion.DataAccess
             var result = await repository.Venue
                 .Select(venue => new
                 {
-                    Venue = venue,
+                    VenueGuid = venue.VenueGuid,
                     Description = venue.Descriptions
                         .OrderByDescending(d => d.ModifiedDate)
                         .FirstOrDefault()
@@ -30,7 +30,7 @@ namespace GloboTickets.Promotion.DataAccess
                 .ToListAsync();
 
             return result
-                .Select(row => MapVenue(row.Venue.VenueGuid, row.Description))
+                .Select(row => MapVenue(row.VenueGuid, row.Description))
                 .ToList();
         }
 
@@ -40,14 +40,14 @@ namespace GloboTickets.Promotion.DataAccess
                 .Where(venue => venue.VenueGuid == venueGuid)
                 .Select(venue => new
                 {
-                    Venue = venue,
+                    VenueGuid = venue.VenueGuid,
                     Description = venue.Descriptions
                         .OrderByDescending(d => d.ModifiedDate)
                         .FirstOrDefault()
                 })
                 .SingleOrDefaultAsync();
 
-            return result == null ? null : MapVenue(result.Venue.VenueGuid, result.Description);
+            return result == null ? null : MapVenue(result.VenueGuid, result.Description);
         }
 
         private VenueModel MapVenue(Guid venueGuid, VenueDescription venueDescription)
