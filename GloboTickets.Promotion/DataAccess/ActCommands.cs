@@ -47,9 +47,6 @@ namespace GloboTickets.Promotion.DataAccess
 
             if (lastActDescription == null ||
                 lastActDescription.Title != actDescriptionModel.Title ||
-                lastActDescription.Date != actDescriptionModel.Date ||
-                lastActDescription.City != actDescriptionModel.City ||
-                lastActDescription.Venue != actDescriptionModel.Venue ||
                 lastActDescription.ImageHash != actDescriptionModel.ImageHash)
             {
                 await repository.AddAsync(new ActDescription
@@ -57,9 +54,6 @@ namespace GloboTickets.Promotion.DataAccess
                     ModifiedDate = DateTime.UtcNow,
                     Act = act,
                     Title = actDescriptionModel.Title,
-                    Date = actDescriptionModel.Date,
-                    City = actDescriptionModel.City,
-                    Venue = actDescriptionModel.Venue,
                     ImageHash = actDescriptionModel.ImageHash
                 });
                 await repository.SaveChangesAsync();

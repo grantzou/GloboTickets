@@ -22,9 +22,6 @@ namespace GloboTickets.Promotion.Pages
         public Guid ActGuid { get; set; }
 
         public string Title { get; set; }
-        public DateTime Date { get; set; } = DateTime.Now;
-        public string City { get; set; }
-        public string Venue { get; set; }
         public string ImageHash { get; set; }
 
         public async Task<IActionResult> OnGet()
@@ -40,9 +37,6 @@ namespace GloboTickets.Promotion.Pages
                 if (act.Description != null)
                 {
                     Title = act.Description.Title;
-                    Date = act.Description.Date.ToLocalTime();
-                    City = act.Description.City;
-                    Venue = act.Description.Venue;
                     ImageHash = act.Description.ImageHash;
                 }
                 return Page();

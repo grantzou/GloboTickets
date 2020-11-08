@@ -64,9 +64,6 @@ namespace GloboTickets.Promotion.DataAccess
             return actDescription == null ? null : new ActDescriptionModel
             {
                 Title = actDescription.Title,
-                Date = actDescription.Date,
-                City = actDescription.City,
-                Venue = actDescription.Venue,
                 ImageHash = actDescription.ImageHash,
                 LastModifiedTicks = actDescription.ModifiedDate.Ticks
             };

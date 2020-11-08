@@ -33,12 +33,6 @@ namespace GloboTickets.Promotion.Pages
         [BindProperty]
         public string Title { get; set; }
         [BindProperty]
-        public DateTime Date { get; set; } = DateTime.Now;
-        [BindProperty]
-        public string City { get; set; }
-        [BindProperty]
-        public string Venue { get; set; }
-        [BindProperty]
         public IFormFile Image { get; set; }
         [BindProperty]
         public string ImageHash { get; set; }
@@ -60,9 +54,6 @@ namespace GloboTickets.Promotion.Pages
                 if (act.Description != null)
                 {
                     Title = act.Description.Title;
-                    Date = act.Description.Date.ToLocalTime();
-                    City = act.Description.City;
-                    Venue = act.Description.Venue;
                     ImageHash = act.Description.ImageHash;
                     LastModifiedTicks = act.Description.LastModifiedTicks;
                 }
@@ -78,9 +69,6 @@ namespace GloboTickets.Promotion.Pages
                 await actCommands.SetActDescription(ActGuid, new ActDescriptionModel
                 {
                     Title = Title,
-                    Date = Date.ToUniversalTime(),
-                    City = City,
-                    Venue = Venue,
                     ImageHash = imageHash,
                     LastModifiedTicks = LastModifiedTicks
                 });

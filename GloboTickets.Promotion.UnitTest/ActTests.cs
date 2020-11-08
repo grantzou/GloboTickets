@@ -123,9 +123,6 @@ namespace GloboTickets.Promotion.Test
             ActDescriptionModel actDescription = new ActDescriptionModel
             {
                 Title = title,
-                Date = new DateTime(2021, 8, 29, 1, 0, 0, DateTimeKind.Utc),
-                City = "Durant, OK",
-                Venue = "Choctaw Grand Theater",
                 ImageHash = Convert.ToBase64String(imageHash),
                 LastModifiedTicks = lastModifiedTicks
             };
