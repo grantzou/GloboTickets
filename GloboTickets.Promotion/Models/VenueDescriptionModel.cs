@@ -2,7 +2,7 @@ using System;
 
 namespace GloboTickets.Promotion.Models
 {
-    public class VenueDetailsModel
+    public class VenueDescriptionModel
     {
         public string Name { get; set; }
         public string City { get; set; }

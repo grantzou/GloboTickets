@@ -8,6 +8,6 @@ namespace GloboTickets.Promotion.DataAccess.Entities
         public int VenueId { get; set; }
         public Guid VenueGuid { get; set; }
 
-        public ICollection<VenueDetails> Details { get; set; } = new List<VenueDetails>();
+        public ICollection<VenueDescription> Descriptions { get; set; } = new List<VenueDescription>();
     }
 }

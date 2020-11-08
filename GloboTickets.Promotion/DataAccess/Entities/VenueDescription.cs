@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GloboTickets.Promotion.DataAccess.Entities
 {
-    public class VenueDetails
+    public class VenueDescription
     {
-        public int VenueDetailsId { get; set; }
+        public int VenueDescriptionId { get; set; }
 
         public Venue Venue { get; set; }
         public int VenueId { get; set; }

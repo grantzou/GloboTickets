@@ -43,10 +43,10 @@ namespace GloboTickets.Promotion.UnitTest
         }
 
         [Fact]
-        public async Task WhenSetVenueDetails_VenueDetailsAreReturned()
+        public async Task WhenSetVenueDescription_VenueDescriptionIsReturned()
         {
             var venueGuid = Guid.NewGuid();
-            await venueCommands.SetVenueDetails(venueGuid, new VenueDetailsModel
+            await venueCommands.SetVenueDescription(venueGuid, new VenueDescriptionModel
             {
                 Name = "American Airlines Center",
                 City = "Dallas, TX",
@@ -54,7 +54,7 @@ namespace GloboTickets.Promotion.UnitTest
             });
 
             var venue = await venueQueries.GetVenue(venueGuid);
-            venue.Details.Name.Should().Be("American Airlines Center");
+            venue.Description.Name.Should().Be("American Airlines Center");
         }
 
         private VenueQueries venueQueries;

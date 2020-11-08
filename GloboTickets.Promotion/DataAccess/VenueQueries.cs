@@ -23,7 +23,7 @@ namespace GloboTickets.Promotion.DataAccess
                 .Select(venue => new
                 {
                     Venue = venue,
-                    Details = venue.Details
+                    Description = venue.Descriptions
                         .OrderByDescending(d => d.ModifiedDate)
                         .FirstOrDefault()
                 })
@@ -33,7 +33,7 @@ namespace GloboTickets.Promotion.DataAccess
                 .Select(row => new VenueModel
                 {
                     VenueGuid = row.Venue.VenueGuid,
-                    Details = MapVenueDetails(row.Details)
+                    Description = MapVenueDescription(row.Description)
                 })
                 .ToList();
         }
@@ -45,7 +45,7 @@ namespace GloboTickets.Promotion.DataAccess
                 .Select(venue => new
                 {
                     Venue = venue,
-                    Details = venue.Details
+                    Description = venue.Descriptions
                         .OrderByDescending(d => d.ModifiedDate)
                         .FirstOrDefault()
                 })
@@ -54,17 +54,17 @@ namespace GloboTickets.Promotion.DataAccess
             return result == null ? null : new VenueModel
             {
                 VenueGuid = result.Venue.VenueGuid,
-                Details = MapVenueDetails(result.Details)
+                Description = MapVenueDescription(result.Description)
             };
         }
 
-        private VenueDetailsModel MapVenueDetails(VenueDetails details)
+        private VenueDescriptionModel MapVenueDescription(VenueDescription venueDescription)
         {
-            return details == null ? null : new VenueDetailsModel
+            return venueDescription == null ? null : new VenueDescriptionModel
             {
-                Name = details.Name,
-                City = details.City,
-                LastModifiedTicks = details.ModifiedDate.Ticks
+                Name = venueDescription.Name,
+                City = venueDescription.City,
+                LastModifiedTicks = venueDescription.ModifiedDate.Ticks
             };
         }
     }
