@@ -46,15 +46,16 @@ namespace GloboTickets.Promotion.UnitTest
         public async Task WhenSetVenueDescription_VenueDescriptionIsReturned()
         {
             var venueGuid = Guid.NewGuid();
-            await venueCommands.SetVenueDescription(venueGuid, new VenueDescriptionModel
+            await venueCommands.SaveVenue(new VenueModel
             {
+                VenueGuid = venueGuid,
                 Name = "American Airlines Center",
                 City = "Dallas, TX",
                 LastModifiedTicks = 0
             });
 
             var venue = await venueQueries.GetVenue(venueGuid);
-            venue.Description.Name.Should().Be("American Airlines Center");
+            venue.Name.Should().Be("American Airlines Center");
         }
 
         private VenueQueries venueQueries;

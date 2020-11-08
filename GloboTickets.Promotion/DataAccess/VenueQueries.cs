@@ -30,11 +30,7 @@ namespace GloboTickets.Promotion.DataAccess
                 .ToListAsync();
 
             return result
-                .Select(row => new VenueModel
-                {
-                    VenueGuid = row.Venue.VenueGuid,
-                    Description = MapVenueDescription(row.Description)
-                })
+                .Select(row => MapVenue(row.Venue.VenueGuid, row.Description))
                 .ToList();
         }
 
@@ -51,20 +47,17 @@ namespace GloboTickets.Promotion.DataAccess
                 })
                 .SingleOrDefaultAsync();
 
-            return result == null ? null : new VenueModel
-            {
-                VenueGuid = result.Venue.VenueGuid,
-                Description = MapVenueDescription(result.Description)
-            };
+            return result == null ? null : MapVenue(result.Venue.VenueGuid, result.Description);
         }
 
-        private VenueDescriptionModel MapVenueDescription(VenueDescription venueDescription)
+        private VenueModel MapVenue(Guid venueGuid, VenueDescription venueDescription)
         {
-            return venueDescription == null ? null : new VenueDescriptionModel
+            return new VenueModel
             {
-                Name = venueDescription.Name,
-                City = venueDescription.City,
-                LastModifiedTicks = venueDescription.ModifiedDate.Ticks
+                VenueGuid = venueGuid,
+                Name = venueDescription?.Name,
+                City = venueDescription?.City,
+                LastModifiedTicks = venueDescription?.ModifiedDate.Ticks ?? 0
             };
         }
     }
