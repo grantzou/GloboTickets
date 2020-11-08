@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using GloboTickets.Promotion.DataAccess;
 using GloboTickets.Promotion.DataAccess.Entities;
+using GloboTickets.Promotion.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,53 +13,82 @@ namespace GloboTickets.Promotion.UnitTest
     public class ShowTests
     {
         [Fact]
-        public async Task ShowsInitiallyEmpty()
+        public async Task ActInitiallyHasNoShows()
         {
-            List<ShowModel> shows = await showQueries.ListShows();
+            var actGuid = await GivenAct();
+
+            List<ShowModel> shows = await showQueries.ListShows(actGuid);
             shows.Should().BeEmpty();
         }
 
         [Fact]
         public async Task WhenShowIsScheduled_ShowIsReturned()
         {
-            Guid actGuid = Guid.NewGuid();
-            Guid venueGuid = Guid.NewGuid();
+            var actGuid = await GivenAct();
+            var venueGuid = await GivenVenue();
+
             DateTimeOffset startTime = new DateTimeOffset(2021, 03, 21, 08, 00, 00, CstOffset);
             await showCommands.ScheduleShow(actGuid, venueGuid, startTime);
 
-            var shows = await showQueries.ListShows();
+            var shows = await showQueries.ListShows(actGuid);
             shows.Should().Contain(show => show.StartTime == startTime);
         }
 
         [Fact]
         public async Task WhenShowIsScheduledTwice_OneShowIsReturned()
         {
-            Guid actGuid = Guid.NewGuid();
-            Guid venueGuid = Guid.NewGuid();
+            var actGuid = await GivenAct();
+            var venueGuid = await GivenVenue();
+
             DateTimeOffset startTime = new DateTimeOffset(2021, 03, 21, 08, 00, 00, CstOffset);
             await showCommands.ScheduleShow(actGuid, venueGuid, startTime);
             await showCommands.ScheduleShow(actGuid, venueGuid, startTime);
 
-            var shows = await showQueries.ListShows();
+            var shows = await showQueries.ListShows(actGuid);
             shows.Count.Should().Be(1);
         }
 
         [Fact]
         public async Task WhenShowIsCanceled_ShowIsNotReturned()
         {
-            Guid actGuid = Guid.NewGuid();
-            Guid venueGuid = Guid.NewGuid();
+            var actGuid = await GivenAct();
+            var venueGuid = await GivenVenue();
+
             DateTimeOffset startTime = new DateTimeOffset(2021, 03, 21, 08, 00, 00, CstOffset);
             await showCommands.ScheduleShow(actGuid, venueGuid, startTime);
 
             await showCommands.CancelShow(actGuid, venueGuid, startTime);
 
-            var shows = await showQueries.ListShows();
+            var shows = await showQueries.ListShows(actGuid);
             shows.Should().BeEmpty();
+        }
+
+        private async Task<Guid> GivenAct()
+        {
+            var actGuid = Guid.NewGuid();
+            var actModel = new ActModel
+            {
+                ActGuid = actGuid
+            };
+            await actCommands.SaveAct(actModel);
+            return actGuid;
+        }
+
+        private async Task<Guid> GivenVenue()
+        {
+            var venueGuid = Guid.NewGuid();
+            var venueModel = new VenueModel
+            {
+                VenueGuid = venueGuid
+            };
+            await venueCommands.SaveVenue(venueModel);
+            return venueGuid;
         }
 
         static TimeSpan CstOffset = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time").BaseUtcOffset;
 
+        private ActCommands actCommands;
+        private VenueCommands venueCommands;
         private ShowQueries showQueries;
         private ShowCommands showCommands;
 
@@ -68,6 +98,8 @@ namespace GloboTickets.Promotion.UnitTest
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options);
 
+            actCommands = new ActCommands(repository);
+            venueCommands = new VenueCommands(repository);
             showQueries = new ShowQueries(repository);
             showCommands = new ShowCommands(repository);
         }
