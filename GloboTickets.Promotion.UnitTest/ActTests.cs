@@ -25,7 +25,7 @@ namespace GloboTickets.Promotion.UnitTest
         public async Task WhenAddAct_ActIsReturned()
         {
             var actGuid = Guid.NewGuid();
-            await actCommands.AddAct(actGuid);
+            await actCommands.SaveAct(ActModelWith(actGuid, "Gabriel Iglesias"));
 
             var acts = await actQueries.ListActs();
             acts.Should().Contain(act => act.ActGuid == actGuid);
@@ -35,8 +35,8 @@ namespace GloboTickets.Promotion.UnitTest
         public async Task WhenAddActTwice_OneActIsAdded()
         {
             var actGuid = Guid.NewGuid();
-            await actCommands.AddAct(actGuid);
-            await actCommands.AddAct(actGuid);
+            await actCommands.SaveAct(ActModelWith(actGuid, "Gabriel Iglesias"));
+            await actCommands.SaveAct(ActModelWith(actGuid, "Gabriel Iglesias"));
 
             var acts = await actQueries.ListActs();
             acts.Count.Should().Be(1);
@@ -105,7 +105,7 @@ namespace GloboTickets.Promotion.UnitTest
         public async Task WhenRemoveAct_ActIsNotReturned()
         {
             var actGuid = Guid.NewGuid();
-            await actCommands.AddAct(actGuid);
+            await actCommands.SaveAct(ActModelWith(actGuid, "Gabriel Iglesias"));
             await actCommands.RemoveAct(actGuid);
 
             var acts = await actQueries.ListActs();

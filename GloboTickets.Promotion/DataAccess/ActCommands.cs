@@ -16,10 +16,32 @@ namespace GloboTickets.Promotion.DataAccess
             this.repository = repository;
         }
 
-        public async Task AddAct(Guid actGuid)
+        public async Task SaveAct(ActModel actModel)
         {
-            await repository.GetOrInsertAct(actGuid);
-            await repository.SaveChangesAsync();
+            var act = await repository.GetOrInsertAct(actModel.ActGuid);
+            var lastActDescription = act.Descriptions
+                .OrderByDescending(description => description.ModifiedDate)
+                .FirstOrDefault();
+
+            if (lastActDescription == null ||
+                lastActDescription.Title != actModel.Title ||
+                lastActDescription.ImageHash != actModel.ImageHash)
+            {
+                var modifiedTicks = lastActDescription?.ModifiedDate.Ticks ?? 0;
+                if (modifiedTicks != actModel.LastModifiedTicks)
+                {
+                    throw new DbUpdateConcurrencyException("A new update has occurred since you loaded the page. Please refresh and try again.");
+                }
+
+                await repository.AddAsync(new ActDescription
+                {
+                    ModifiedDate = DateTime.UtcNow,
+                    Act = act,
+                    Title = actModel.Title,
+                    ImageHash = actModel.ImageHash
+                });
+                await repository.SaveChangesAsync();
+            }
         }
 
         public async Task RemoveAct(Guid actGuid)
@@ -31,33 +53,6 @@ namespace GloboTickets.Promotion.DataAccess
                 RemovedDate = DateTime.UtcNow
             });
             await repository.SaveChangesAsync();
-        }
-
-        public async Task SaveAct(ActModel actModel)
-        {
-            var act = await repository.GetOrInsertAct(actModel.ActGuid);
-            var lastActDescription = act.Descriptions
-                .OrderByDescending(description => description.ModifiedDate)
-                .FirstOrDefault();
-            var modifiedTicks = lastActDescription?.ModifiedDate.Ticks ?? 0;
-            if (modifiedTicks != actModel.LastModifiedTicks)
-            {
-                throw new DbUpdateConcurrencyException("A new update has occurred since you loaded the page. Please refresh and try again.");
-            }
-
-            if (lastActDescription == null ||
-                lastActDescription.Title != actModel.Title ||
-                lastActDescription.ImageHash != actModel.ImageHash)
-            {
-                await repository.AddAsync(new ActDescription
-                {
-                    ModifiedDate = DateTime.UtcNow,
-                    Act = act,
-                    Title = actModel.Title,
-                    ImageHash = actModel.ImageHash
-                });
-                await repository.SaveChangesAsync();
-            }
         }
     }
 }
