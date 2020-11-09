@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GloboTickets.Promotion.DataAccess.Entities;
-using GloboTickets.Promotion.Models;
+using GloboTickets.Promotion.Info;
 using Microsoft.EntityFrameworkCore;
 
 namespace GloboTickets.Promotion.DataAccess
@@ -17,7 +17,7 @@ namespace GloboTickets.Promotion.DataAccess
             this.repository = repository;
         }
 
-        public async Task<List<ActModel>> ListActs()
+        public async Task<List<ActInfo>> ListActs()
         {
             var result = await repository.Act
                 .Where(act => !act.Removed.Any())
@@ -35,7 +35,7 @@ namespace GloboTickets.Promotion.DataAccess
                 .ToList();
         }
 
-        public async Task<ActModel> GetAct(Guid actGuid)
+        public async Task<ActInfo> GetAct(Guid actGuid)
         {
             var result = await repository.Act
                 .Where(act => act.ActGuid == actGuid)
@@ -51,9 +51,9 @@ namespace GloboTickets.Promotion.DataAccess
             return result == null ? null : MapActModel(result.ActGuid, result.Description);
         }
 
-        private static ActModel MapActModel(Guid actGuid, ActDescription actDescription)
+        private static ActInfo MapActModel(Guid actGuid, ActDescription actDescription)
         {
-            return new ActModel
+            return new ActInfo
             {
                 ActGuid = actGuid,
                 Title = actDescription?.Title,

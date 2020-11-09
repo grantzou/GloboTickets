@@ -1,8 +1,8 @@
 using System;
 
-namespace GloboTickets.Promotion.Models
+namespace GloboTickets.Promotion.Info
 {
-    public class ActModel
+    public class ActInfo
     {
         public Guid ActGuid { get; set; }
         public string Title { get; set; }

@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using GloboTickets.Promotion.DataAccess;
 using GloboTickets.Promotion.DataAccess.Entities;
-using GloboTickets.Promotion.Models;
+using GloboTickets.Promotion.Info;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,7 @@ namespace GloboTickets.Promotion.UnitTest
         [Fact]
         public async Task ActsInitiallyEmpty()
         {
-            List<ActModel> acts = await actQueries.ListActs();
+            List<ActInfo> acts = await actQueries.ListActs();
             acts.Should().BeEmpty();
         }
 
@@ -112,12 +112,12 @@ namespace GloboTickets.Promotion.UnitTest
             acts.Should().BeEmpty();
         }
 
-        private ActModel ActModelWith(Guid actGuid, string title, long lastModifiedTicks = 0)
+        private ActInfo ActModelWith(Guid actGuid, string title, long lastModifiedTicks = 0)
         {
             var sha512 = HashAlgorithm.Create(HashAlgorithmName.SHA512.Name);
             var imageHash = sha512.ComputeHash(Encoding.UTF8.GetBytes(title));
 
-            var actModel = new ActModel
+            var actModel = new ActInfo
             {
                 ActGuid = actGuid,
                 Title = title,

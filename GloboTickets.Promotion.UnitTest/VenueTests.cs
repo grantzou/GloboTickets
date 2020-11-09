@@ -1,7 +1,7 @@
 using FluentAssertions;
 using GloboTickets.Promotion.DataAccess;
 using GloboTickets.Promotion.DataAccess.Entities;
-using GloboTickets.Promotion.Models;
+using GloboTickets.Promotion.Info;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,7 @@ namespace GloboTickets.Promotion.UnitTest
         [Fact]
         public async Task VenuesInitiallyEmpty()
         {
-            List<VenueModel> venues = await venueQueries.ListVenues();
+            List<VenueInfo> venues = await venueQueries.ListVenues();
             venues.Should().BeEmpty();
         }
 
@@ -52,9 +52,9 @@ namespace GloboTickets.Promotion.UnitTest
             venue.Name.Should().Be("American Airlines Center");
         }
 
-        private static VenueModel VenueModelWith(Guid venueGuid, string name, long lastModifiedTicks = 0)
+        private static VenueInfo VenueModelWith(Guid venueGuid, string name, long lastModifiedTicks = 0)
         {
-            return new VenueModel
+            return new VenueInfo
             {
                 VenueGuid = venueGuid,
                 Name = name,

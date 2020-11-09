@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GloboTickets.Promotion.DataAccess.Entities;
-using GloboTickets.Promotion.Models;
+using GloboTickets.Promotion.Info;
 using Microsoft.EntityFrameworkCore;
 
 namespace GloboTickets.Promotion.DataAccess
@@ -17,7 +17,7 @@ namespace GloboTickets.Promotion.DataAccess
             this.repository = repository;
         }
 
-        public async Task<List<VenueModel>> ListVenues()
+        public async Task<List<VenueInfo>> ListVenues()
         {
             var result = await repository.Venue
                 .Select(venue => new
@@ -34,7 +34,7 @@ namespace GloboTickets.Promotion.DataAccess
                 .ToList();
         }
 
-        public async Task<VenueModel> GetVenue(Guid venueGuid)
+        public async Task<VenueInfo> GetVenue(Guid venueGuid)
         {
             var result = await repository.Venue
                 .Where(venue => venue.VenueGuid == venueGuid)
@@ -50,9 +50,9 @@ namespace GloboTickets.Promotion.DataAccess
             return result == null ? null : MapVenue(result.VenueGuid, result.Description);
         }
 
-        private VenueModel MapVenue(Guid venueGuid, VenueDescription venueDescription)
+        private VenueInfo MapVenue(Guid venueGuid, VenueDescription venueDescription)
         {
-            return new VenueModel
+            return new VenueInfo
             {
                 VenueGuid = venueGuid,
                 Name = venueDescription?.Name,

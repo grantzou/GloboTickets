@@ -1,5 +1,5 @@
 ﻿using GloboTickets.Promotion.DataAccess.Entities;
-using GloboTickets.Promotion.Models;
+using GloboTickets.Promotion.Info;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +16,7 @@ namespace GloboTickets.Promotion.DataAccess
             this.repository = repository;
         }
 
-        public async Task SaveAct(ActModel actModel)
+        public async Task SaveAct(ActInfo actModel)
         {
             var act = await repository.GetOrInsertAct(actModel.ActGuid);
             var lastActDescription = act.Descriptions

@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using GloboTickets.Promotion.DataAccess;
 using GloboTickets.Promotion.DataAccess.Entities;
-using GloboTickets.Promotion.Models;
+using GloboTickets.Promotion.Info;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -66,7 +66,7 @@ namespace GloboTickets.Promotion.UnitTest
         private async Task<Guid> GivenAct()
         {
             var actGuid = Guid.NewGuid();
-            var actModel = new ActModel
+            var actModel = new ActInfo
             {
                 ActGuid = actGuid
             };
@@ -77,7 +77,7 @@ namespace GloboTickets.Promotion.UnitTest
         private async Task<Guid> GivenVenue()
         {
             var venueGuid = Guid.NewGuid();
-            var venueModel = new VenueModel
+            var venueModel = new VenueInfo
             {
                 VenueGuid = venueGuid
             };

@@ -14,7 +14,7 @@ namespace GloboTickets.Promotion.Pages
             this.actQueries = actQueries;
         }
 
-        public List<Models.ActModel> Acts { get; set; }
+        public List<Info.ActInfo> Acts { get; set; }
 
         public async Task OnGetAsync()
         {
