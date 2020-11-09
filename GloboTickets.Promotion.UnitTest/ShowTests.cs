@@ -27,7 +27,7 @@ namespace GloboTickets.Promotion.UnitTest
             var actGuid = await GivenAct();
             var venueGuid = await GivenVenue();
 
-            DateTimeOffset startTime = new DateTimeOffset(2021, 03, 21, 08, 00, 00, CstOffset);
+            DateTimeOffset startTime = new DateTimeOffset(2021, 03, 21, 08, 00, 00, LocalOffset);
             await showCommands.ScheduleShow(actGuid, venueGuid, startTime);
 
             var shows = await showQueries.ListShows(actGuid);
@@ -40,7 +40,7 @@ namespace GloboTickets.Promotion.UnitTest
             var actGuid = await GivenAct();
             var venueGuid = await GivenVenue();
 
-            DateTimeOffset startTime = new DateTimeOffset(2021, 03, 21, 08, 00, 00, CstOffset);
+            DateTimeOffset startTime = new DateTimeOffset(2021, 03, 21, 08, 00, 00, LocalOffset);
             await showCommands.ScheduleShow(actGuid, venueGuid, startTime);
             await showCommands.ScheduleShow(actGuid, venueGuid, startTime);
 
@@ -54,7 +54,7 @@ namespace GloboTickets.Promotion.UnitTest
             var actGuid = await GivenAct();
             var venueGuid = await GivenVenue();
 
-            DateTimeOffset startTime = new DateTimeOffset(2021, 03, 21, 08, 00, 00, CstOffset);
+            DateTimeOffset startTime = new DateTimeOffset(2021, 03, 21, 08, 00, 00, LocalOffset);
             await showCommands.ScheduleShow(actGuid, venueGuid, startTime);
 
             await showCommands.CancelShow(actGuid, venueGuid, startTime);
@@ -85,7 +85,7 @@ namespace GloboTickets.Promotion.UnitTest
             return venueGuid;
         }
 
-        static TimeSpan CstOffset = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time").BaseUtcOffset;
+        static TimeSpan LocalOffset = TimeZoneInfo.Local.BaseUtcOffset;
 
         private ActCommands actCommands;
         private VenueCommands venueCommands;
