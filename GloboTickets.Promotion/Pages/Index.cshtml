@@ -7,7 +7,7 @@
 
 <h1>GloboTickets Promotion System</h1>
 
-<a type="button" class="btn btn-primary" href="~/Show/@Guid.NewGuid().ToString()">Add Show</a>
+<a type="button" class="btn btn-primary" href="~/Act/@Guid.NewGuid().ToString()">Add Show</a>
 
 <div class="d-flex show-container">
     @foreach (var show in Model.Acts)
@@ -18,8 +18,8 @@
                 <h5 class="card-title">@show.Title</h5>
             </div>
             <div class="card-footer">
-                <a href="~/Show/@show.ActGuid" class="btn btn-primary">Edit</a>
-                <a href="~/ShowRemove/@show.ActGuid" class="btn btn-danger">Remove</a>
+                <a href="~/Act/@show.ActGuid" class="btn btn-primary">Edit</a>
+                <a href="~/ActRemove/@show.ActGuid" class="btn btn-danger">Remove</a>
             </div>
         </div>
     }
