@@ -9,16 +9,16 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace GloboTickets.Promotion.Pages
+namespace GloboTickets.Promotion.Pages.Acts
 {
-    public class ActModel : PageModel
+    public class IndexModel : PageModel
     {
         private readonly ActQueries actQueries;
         private readonly ActCommands actCommands;
         private readonly ContentQueries contentQueries;
         private readonly ContentCommands contentCommands;
 
-        public ActModel(ActQueries actQueries, ActCommands actCommands, ContentQueries contentQueries, ContentCommands contentCommands)
+        public IndexModel(ActQueries actQueries, ActCommands actCommands, ContentQueries contentQueries, ContentCommands contentCommands)
         {
             this.actQueries = actQueries;
             this.actCommands = actCommands;
@@ -26,7 +26,7 @@ namespace GloboTickets.Promotion.Pages
             this.contentCommands = contentCommands;
         }
 
-        [BindProperty(SupportsGet=true)]
+        [BindProperty(SupportsGet = true)]
         public Guid ActGuid { get; set; }
 
         public bool AddAct { get; set; }

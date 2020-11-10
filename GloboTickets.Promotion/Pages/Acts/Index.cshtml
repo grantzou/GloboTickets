@@ -1,10 +1,10 @@
 ﻿@page "{ActGuid}"
-@model GloboTickets.Promotion.Pages.ActModel
+@model GloboTickets.Promotion.Pages.Acts.IndexModel
 @{
     Layout = "_Layout";
 }
 
-<h1>@(Model.AddAct ? "Add Show" : "Edit Show")</h1>
+<h1>@(Model.AddAct ? "Add Act" : "Edit Act")</h1>
 
 <div class="container-fluid">
     <div class="row">
@@ -23,7 +23,7 @@
                 <button type="submit" class="btn btn-primary">@(Model.AddAct ? "Add" : "Save")</button>
                 @if (!Model.AddAct)
                 {
-                    <a class="btn btn-danger" href="~/ShowRemove/@Model.ActGuid">Remove</a>
+                    <a class="btn btn-danger" href="~/Acts/@Model.ActGuid/Remove">Remove</a>
                 }
                 <a class="btn btn-light" href="~/">Cancel</a>
             </form>

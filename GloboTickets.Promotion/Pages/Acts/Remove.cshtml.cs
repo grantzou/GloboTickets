@@ -5,21 +5,21 @@ using GloboTickets.Promotion.DataAccess;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace GloboTickets.Promotion.Pages
+namespace GloboTickets.Promotion.Pages.Acts
 {
-    public class ActRemoveModel : PageModel
+    public class RemoveModel : PageModel
     {
         private readonly ActQueries actQueries;
 
         private readonly ActCommands actCommands;
 
-        public ActRemoveModel(ActQueries actQueries, ActCommands actCommands)
+        public RemoveModel(ActQueries actQueries, ActCommands actCommands)
         {
             this.actQueries = actQueries;
             this.actCommands = actCommands;
         }
 
-        [BindProperty(SupportsGet=true)]
+        [BindProperty(SupportsGet = true)]
         public Guid ActGuid { get; set; }
 
         public string Title { get; set; }
