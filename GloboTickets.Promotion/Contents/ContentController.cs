@@ -1,9 +1,8 @@
-﻿using GloboTickets.Promotion.DataAccess;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
-namespace GloboTickets.Promotion.Controllers
+namespace GloboTickets.Promotion.Contents
 {
     public class ContentController : ControllerBase
     {
@@ -16,7 +15,7 @@ namespace GloboTickets.Promotion.Controllers
 
         [HttpGet]
         [Route("content/{hash}")]
-        [ResponseCache(Duration=60*60*24*365)]
+        [ResponseCache(Duration = 60 * 60 * 24 * 365)]
         public async Task<IActionResult> Get(string hash)
         {
             var content = await queries.GetContent(Uri.UnescapeDataString(hash));

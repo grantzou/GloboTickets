@@ -1,9 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using GloboTickets.Promotion.Acts;
+using GloboTickets.Promotion.Contents;
+using GloboTickets.Promotion.DataAccess.Entities;
+using GloboTickets.Promotion.Shows;
+using GloboTickets.Promotion.Venues;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GloboTickets.Promotion.DataAccess.Entities
+namespace GloboTickets.Promotion.DataAccess
 {
     public class PromotionContext : DbContext
     {

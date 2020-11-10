@@ -1,7 +1,8 @@
-﻿using System;
+﻿using GloboTickets.Promotion.DataAccess.Entities;
+using System;
 using System.Collections.Generic;
 
-namespace GloboTickets.Promotion.DataAccess.Entities
+namespace GloboTickets.Promotion.Acts
 {
     public class Act
     {

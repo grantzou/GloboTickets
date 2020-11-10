@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GloboTickets.Promotion.DataAccess.Entities
+namespace GloboTickets.Promotion.Contents
 {
     public class Content
     {

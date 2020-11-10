@@ -1,5 +1,6 @@
+using GloboTickets.Promotion.Acts;
+using GloboTickets.Promotion.Contents;
 using GloboTickets.Promotion.DataAccess;
-using GloboTickets.Promotion.Info;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -63,7 +64,7 @@ namespace GloboTickets.Promotion.Pages
 
             try
             {
-                await actCommands.SaveAct(new Info.ActInfo
+                await actCommands.SaveAct(new ActInfo
                 {
                     ActGuid = ActGuid,
                     Title = Title,

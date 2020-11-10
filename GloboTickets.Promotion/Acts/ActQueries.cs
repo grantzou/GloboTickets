@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GloboTickets.Promotion.Acts;
 using GloboTickets.Promotion.DataAccess.Entities;
-using GloboTickets.Promotion.Info;
 using Microsoft.EntityFrameworkCore;
 
 namespace GloboTickets.Promotion.DataAccess

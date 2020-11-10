@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GloboTickets.Promotion.Acts;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace GloboTickets.Promotion.DataAccess.Entities

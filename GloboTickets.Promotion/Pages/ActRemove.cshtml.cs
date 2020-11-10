@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using GloboTickets.Promotion.Acts;
 using GloboTickets.Promotion.DataAccess;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;

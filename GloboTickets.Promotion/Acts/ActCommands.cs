@@ -1,11 +1,11 @@
 ﻿using GloboTickets.Promotion.DataAccess.Entities;
-using GloboTickets.Promotion.Info;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using GloboTickets.Promotion.DataAccess;
 
-namespace GloboTickets.Promotion.DataAccess
+namespace GloboTickets.Promotion.Acts
 {
     public class ActCommands
     {

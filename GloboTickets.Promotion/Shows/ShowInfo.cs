@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace GloboTickets.Promotion.DataAccess
+namespace GloboTickets.Promotion.Shows
 {
-    public class ShowModel
+    public class ShowInfo
     {
         public DateTimeOffset StartTime { get; set; }
     }

@@ -1,6 +1,6 @@
 using System;
 
-namespace GloboTickets.Promotion.Info
+namespace GloboTickets.Promotion.Venues
 {
     public class VenueInfo
     {

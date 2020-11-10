@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GloboTickets.Promotion.DataAccess.Entities
+namespace GloboTickets.Promotion.Shows
 {
     public class ShowCancelled
     {

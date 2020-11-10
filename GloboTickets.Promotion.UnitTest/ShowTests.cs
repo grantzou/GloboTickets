@@ -1,7 +1,8 @@
 ﻿using FluentAssertions;
+using GloboTickets.Promotion.Acts;
 using GloboTickets.Promotion.DataAccess;
-using GloboTickets.Promotion.DataAccess.Entities;
-using GloboTickets.Promotion.Info;
+using GloboTickets.Promotion.Shows;
+using GloboTickets.Promotion.Venues;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace GloboTickets.Promotion.UnitTest
         {
             var actGuid = await GivenAct();
 
-            List<ShowModel> shows = await showQueries.ListShows(actGuid);
+            List<ShowInfo> shows = await showQueries.ListShows(actGuid);
             shows.Should().BeEmpty();
         }
 

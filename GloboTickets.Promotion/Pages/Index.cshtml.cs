@@ -1,3 +1,4 @@
+using GloboTickets.Promotion.Acts;
 using GloboTickets.Promotion.DataAccess;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace GloboTickets.Promotion.Pages
             this.actQueries = actQueries;
         }
 
-        public List<Info.ActInfo> Acts { get; set; }
+        public List<ActInfo> Acts { get; set; }
 
         public async Task OnGetAsync()
         {

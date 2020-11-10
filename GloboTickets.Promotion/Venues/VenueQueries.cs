@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GloboTickets.Promotion.DataAccess.Entities;
-using GloboTickets.Promotion.Info;
+using GloboTickets.Promotion.DataAccess;
 using Microsoft.EntityFrameworkCore;
 
-namespace GloboTickets.Promotion.DataAccess
+namespace GloboTickets.Promotion.Venues
 {
     public class VenueQueries
     {
@@ -22,7 +21,7 @@ namespace GloboTickets.Promotion.DataAccess
             var result = await repository.Venue
                 .Select(venue => new
                 {
-                    VenueGuid = venue.VenueGuid,
+                    venue.VenueGuid,
                     Description = venue.Descriptions
                         .OrderByDescending(d => d.ModifiedDate)
                         .FirstOrDefault()
@@ -40,7 +39,7 @@ namespace GloboTickets.Promotion.DataAccess
                 .Where(venue => venue.VenueGuid == venueGuid)
                 .Select(venue => new
                 {
-                    VenueGuid = venue.VenueGuid,
+                    venue.VenueGuid,
                     Description = venue.Descriptions
                         .OrderByDescending(d => d.ModifiedDate)
                         .FirstOrDefault()

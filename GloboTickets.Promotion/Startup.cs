@@ -1,5 +1,6 @@
+using GloboTickets.Promotion.Acts;
+using GloboTickets.Promotion.Contents;
 using GloboTickets.Promotion.DataAccess;
-using GloboTickets.Promotion.DataAccess.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;

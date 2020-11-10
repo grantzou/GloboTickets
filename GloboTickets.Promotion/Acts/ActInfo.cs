@@ -1,6 +1,6 @@
 using System;
 
-namespace GloboTickets.Promotion.Info
+namespace GloboTickets.Promotion.Acts
 {
     public class ActInfo
     {

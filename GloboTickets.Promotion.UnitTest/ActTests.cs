@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
+using GloboTickets.Promotion.Acts;
 using GloboTickets.Promotion.DataAccess;
-using GloboTickets.Promotion.DataAccess.Entities;
-using GloboTickets.Promotion.Info;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

@@ -1,12 +1,9 @@
 using FluentAssertions;
 using GloboTickets.Promotion.DataAccess;
-using GloboTickets.Promotion.DataAccess.Entities;
-using GloboTickets.Promotion.Info;
+using GloboTickets.Promotion.Venues;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 

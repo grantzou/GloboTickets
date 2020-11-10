@@ -1,11 +1,11 @@
-﻿using GloboTickets.Promotion.DataAccess.Entities;
+﻿using GloboTickets.Promotion.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GloboTickets.Promotion.DataAccess
+namespace GloboTickets.Promotion.Shows
 {
     public class ShowQueries
     {
@@ -16,7 +16,7 @@ namespace GloboTickets.Promotion.DataAccess
             this.repository = repository;
         }
 
-        public async Task<List<ShowModel>> ListShows(Guid actGuid)
+        public async Task<List<ShowInfo>> ListShows(Guid actGuid)
         {
             var result = await repository.Show
                 .Where(show =>
@@ -24,10 +24,10 @@ namespace GloboTickets.Promotion.DataAccess
                     !show.Cancelled.Any())
                 .ToListAsync();
 
-            return result.Select(show => new ShowModel
-                {
-                    StartTime = show.StartTime
-                })
+            return result.Select(show => new ShowInfo
+            {
+                StartTime = show.StartTime
+            })
                 .ToList();
         }
     }

@@ -1,8 +1,8 @@
-﻿using GloboTickets.Promotion.DataAccess.Entities;
+﻿using GloboTickets.Promotion.DataAccess;
 using System;
 using System.Threading.Tasks;
 
-namespace GloboTickets.Promotion
+namespace GloboTickets.Promotion.Shows
 {
     public class ShowCommands
     {

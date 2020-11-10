@@ -1,7 +1,9 @@
-﻿using System;
+﻿using GloboTickets.Promotion.Acts;
+using GloboTickets.Promotion.Venues;
+using System;
 using System.Collections.Generic;
 
-namespace GloboTickets.Promotion.DataAccess.Entities
+namespace GloboTickets.Promotion.Shows
 {
     public class Show
     {
