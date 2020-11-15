@@ -1,12 +1,13 @@
-using GloboTickets.Promotion.Acts;
-using GloboTickets.Promotion.Contents;
-using GloboTickets.Promotion.DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GloboTickets.Promotion
 {
@@ -22,19 +23,7 @@ namespace GloboTickets.Promotion
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string connectionString = Configuration.GetConnectionString("PromotionContext");
-            services.AddDbContext<PromotionContext>(options =>
-            {
-                options.UseSqlServer(connectionString);
-            });
-
-            services.AddControllers();
-            services.AddRazorPages();
-
-            services.AddScoped<ActQueries>();
-            services.AddScoped<ActCommands>();
-            services.AddScoped<ContentQueries>();
-            services.AddScoped<ContentCommands>();
+            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,11 +35,10 @@ namespace GloboTickets.Promotion
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -60,8 +48,9 @@ namespace GloboTickets.Promotion
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
-                endpoints.MapRazorPages();
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
