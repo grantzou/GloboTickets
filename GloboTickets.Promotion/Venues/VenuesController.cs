@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using GloboTickets.Promotion.Data;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using GloboTickets.Promotion.Data;
-using GloboTickets.Promotion.Venues;
 
-namespace GloboTickets.Promotion.Controllers
+namespace GloboTickets.Promotion.Venues
 {
     public class VenuesController : Controller
     {
         private readonly PromotionContext _context;
+        private readonly VenueQueries queries;
 
-        public VenuesController(PromotionContext context)
+        public VenuesController(PromotionContext context, VenueQueries queries)
         {
             _context = context;
+            this.queries = queries;
         }
 
         // GET: Venues

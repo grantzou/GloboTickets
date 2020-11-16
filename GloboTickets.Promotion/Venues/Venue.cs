@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace GloboTickets.Promotion.Venues
@@ -9,11 +10,12 @@ namespace GloboTickets.Promotion.Venues
         [Required]
         public Guid VenueGuid { get; set; }
 
+        public ICollection<VenueDescription> Descriptions { get; set; } = new List<VenueDescription>();
+
+        // This data to be moved to a new table.
         [MaxLength(50)]
-        [Required]
         public string Name { get; set; }
         [MaxLength(50)]
-        [Required]
         public string City { get; set; }
     }
 }
