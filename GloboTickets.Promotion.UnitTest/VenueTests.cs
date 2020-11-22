@@ -49,6 +49,20 @@ namespace GloboTickets.Promotion.UnitTest
             venue.Name.Should().Be("American Airlines Center");
         }
 
+        [Fact]
+        public async Task WhenDeleteVenue_VenueIsNotReturned()
+        {
+            var venueGuid = Guid.NewGuid();
+            await venueCommands.SaveVenue(VenueModelWith(venueGuid, "American Airlines Center"));
+
+            await venueCommands.DeleteVenue(venueGuid);
+
+            var venue = await venueQueries.GetVenue(venueGuid);
+            venue.Should().BeNull();
+            var venues = await venueQueries.ListVenues();
+            venues.Should().BeEmpty();
+        }
+
         private static VenueInfo VenueModelWith(Guid venueGuid, string name, long lastModifiedTicks = 0)
         {
             return new VenueInfo
