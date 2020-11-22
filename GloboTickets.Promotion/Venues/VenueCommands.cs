@@ -42,5 +42,16 @@ namespace GloboTickets.Promotion.Venues
                 await repository.SaveChangesAsync();
             }
         }
+
+        public async Task DeleteVenue(Guid venueGuid)
+        {
+            var venue = await repository.GetOrInsertVenue(venueGuid);
+            await repository.AddAsync(new VenueRemoved
+            {
+                Venue = venue,
+                RemovedDate = DateTime.UtcNow
+            });
+            await repository.SaveChangesAsync();
+        }
     }
 }
