@@ -39,14 +39,11 @@ namespace GloboTickets.Promotion.Venues
                 .Where(venue => venue.VenueGuid == venueGuid)
                 .Select(venue => new
                 {
-                    venue.VenueGuid,
-                    Description = venue.Descriptions
-                        .OrderByDescending(d => d.ModifiedDate)
-                        .FirstOrDefault()
+                    venue.VenueGuid
                 })
                 .SingleOrDefaultAsync();
 
-            return result == null ? null : MapVenue(result.VenueGuid, result.Description);
+            return result == null ? null : MapVenue(result.VenueGuid, null);
         }
 
         private VenueInfo MapVenue(Guid venueGuid, VenueDescription venueDescription)
