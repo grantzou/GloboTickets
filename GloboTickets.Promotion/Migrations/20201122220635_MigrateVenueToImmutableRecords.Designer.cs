@@ -4,14 +4,16 @@ using GloboTickets.Promotion.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GloboTickets.Promotion.Migrations
 {
     [DbContext(typeof(PromotionContext))]
-    partial class PromotionContextModelSnapshot : ModelSnapshot
+    [Migration("20201122220635_MigrateVenueToImmutableRecords")]
+    partial class MigrateVenueToImmutableRecords
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,6 +27,14 @@ namespace GloboTickets.Promotion.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
+
+                    b.Property<string>("City")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<Guid>("VenueGuid")
                         .HasColumnType("uniqueidentifier");
