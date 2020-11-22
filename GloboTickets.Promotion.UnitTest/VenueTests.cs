@@ -50,6 +50,20 @@ namespace GloboTickets.Promotion.UnitTest
         }
 
         [Fact]
+        public async Task WhenVenueIsModifiedConcurrently_ExceptionIsThrown()
+        {
+            var venueGuid = Guid.NewGuid();
+            await venueCommands.SaveVenue(VenueModelWith(venueGuid, "American Airlines Center"));
+            var venue = await venueQueries.GetVenue(venueGuid);
+
+            await venueCommands.SaveVenue(VenueModelWith(venueGuid, "Change 1", venue.LastModifiedTicks));
+            Func<Task> concurrentSave = () =>
+                venueCommands.SaveVenue(VenueModelWith(venueGuid, "Change 2", venue.LastModifiedTicks));
+
+            await concurrentSave.Should().ThrowAsync<DbUpdateConcurrencyException>();
+        }
+
+        [Fact]
         public async Task WhenDeleteVenue_VenueIsNotReturned()
         {
             var venueGuid = Guid.NewGuid();

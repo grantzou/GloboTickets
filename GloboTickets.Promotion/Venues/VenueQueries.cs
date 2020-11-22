@@ -19,7 +19,6 @@ namespace GloboTickets.Promotion.Venues
         public async Task<List<VenueInfo>> ListVenues()
         {
             var result = await repository.Venue
-                .Where(venue => !venue.Removed.Any())
                 .Select(venue => new
                 {
                     venue.VenueGuid,
@@ -37,7 +36,7 @@ namespace GloboTickets.Promotion.Venues
         public async Task<VenueInfo> GetVenue(Guid venueGuid)
         {
             var result = await repository.Venue
-                .Where(venue => venue.VenueGuid == venueGuid && !venue.Removed.Any())
+                .Where(venue => venue.VenueGuid == venueGuid)
                 .Select(venue => new
                 {
                     venue.VenueGuid,
