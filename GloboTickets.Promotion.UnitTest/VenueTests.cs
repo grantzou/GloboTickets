@@ -22,7 +22,7 @@ namespace GloboTickets.Promotion.UnitTest
         public async Task WhenAddVenue_VenueIsReturned()
         {
             var venueGuid = Guid.NewGuid();
-            await venueCommands.SaveVenue(VenueModelWith(venueGuid, "American Airlines Center"));
+            await venueCommands.SaveVenue(VenueInfoWith(venueGuid, "American Airlines Center"));
 
             var venues = await venueQueries.ListVenues();
             venues.Should().Contain(venue => venue.VenueGuid == venueGuid);
@@ -32,8 +32,8 @@ namespace GloboTickets.Promotion.UnitTest
         public async Task WhenAddVenueTwice_OneVenueIsAdded()
         {
             var venueGuid = Guid.NewGuid();
-            await venueCommands.SaveVenue(VenueModelWith(venueGuid, "American Airlines Center"));
-            await venueCommands.SaveVenue(VenueModelWith(venueGuid, "American Airlines Center"));
+            await venueCommands.SaveVenue(VenueInfoWith(venueGuid, "American Airlines Center"));
+            await venueCommands.SaveVenue(VenueInfoWith(venueGuid, "American Airlines Center"));
 
             var venues = await venueQueries.ListVenues();
             venues.Count.Should().Be(1);
@@ -43,22 +43,35 @@ namespace GloboTickets.Promotion.UnitTest
         public async Task WhenSetVenueDescription_VenueDescriptionIsReturned()
         {
             var venueGuid = Guid.NewGuid();
-            await venueCommands.SaveVenue(VenueModelWith(venueGuid, "American Airlines Center"));
+            await venueCommands.SaveVenue(VenueInfoWith(venueGuid, "American Airlines Center"));
 
             var venue = await venueQueries.GetVenue(venueGuid);
             venue.Name.Should().Be("American Airlines Center");
         }
 
         [Fact]
+        public async Task WhenSetVenueToSameDescription_NothingIsSaved()
+        {
+            var venueGuid = Guid.NewGuid();
+            await venueCommands.SaveVenue(VenueInfoWith(venueGuid, "American Airlines Center"));
+            var firstSnapshot = await venueQueries.GetVenue(venueGuid);
+
+            await venueCommands.SaveVenue(VenueInfoWith(venueGuid, "American Airlines Center",
+                firstSnapshot.LastModifiedTicks));
+            var secondSnapshot = await venueQueries.GetVenue(venueGuid);
+            secondSnapshot.LastModifiedTicks.Should().Be(firstSnapshot.LastModifiedTicks);
+        }
+
+        [Fact]
         public async Task WhenVenueIsModifiedConcurrently_ExceptionIsThrown()
         {
             var venueGuid = Guid.NewGuid();
-            await venueCommands.SaveVenue(VenueModelWith(venueGuid, "American Airlines Center"));
+            await venueCommands.SaveVenue(VenueInfoWith(venueGuid, "American Airlines Center"));
             var venue = await venueQueries.GetVenue(venueGuid);
 
-            await venueCommands.SaveVenue(VenueModelWith(venueGuid, "Change 1", venue.LastModifiedTicks));
+            await venueCommands.SaveVenue(VenueInfoWith(venueGuid, "Change 1", venue.LastModifiedTicks));
             Func<Task> concurrentSave = () =>
-                venueCommands.SaveVenue(VenueModelWith(venueGuid, "Change 2", venue.LastModifiedTicks));
+                venueCommands.SaveVenue(VenueInfoWith(venueGuid, "Change 2", venue.LastModifiedTicks));
 
             await concurrentSave.Should().ThrowAsync<DbUpdateConcurrencyException>();
         }
@@ -67,7 +80,7 @@ namespace GloboTickets.Promotion.UnitTest
         public async Task WhenDeleteVenue_VenueIsNotReturned()
         {
             var venueGuid = Guid.NewGuid();
-            await venueCommands.SaveVenue(VenueModelWith(venueGuid, "American Airlines Center"));
+            await venueCommands.SaveVenue(VenueInfoWith(venueGuid, "American Airlines Center"));
 
             await venueCommands.DeleteVenue(venueGuid);
 
@@ -77,7 +90,7 @@ namespace GloboTickets.Promotion.UnitTest
             venues.Should().BeEmpty();
         }
 
-        private static VenueInfo VenueModelWith(Guid venueGuid, string name, long lastModifiedTicks = 0)
+        private static VenueInfo VenueInfoWith(Guid venueGuid, string name, long lastModifiedTicks = 0)
         {
             return new VenueInfo
             {
