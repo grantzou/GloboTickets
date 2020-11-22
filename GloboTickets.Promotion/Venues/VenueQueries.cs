@@ -19,6 +19,7 @@ namespace GloboTickets.Promotion.Venues
         public async Task<List<VenueInfo>> ListVenues()
         {
             var result = await repository.Venue
+                .Where(venue => !venue.Removed.Any())
                 .Select(venue => new
                 {
                     venue.VenueGuid,
@@ -29,21 +30,25 @@ namespace GloboTickets.Promotion.Venues
                 .ToListAsync();
 
             return result
-                .Select(row => MapVenue(row.VenueGuid, row.Description))
+                .Select(row => MapVenue(row.VenueGuid, null))
                 .ToList();
         }
 
         public async Task<VenueInfo> GetVenue(Guid venueGuid)
         {
             var result = await repository.Venue
-                .Where(venue => venue.VenueGuid == venueGuid)
+                .Where(venue => venue.VenueGuid == venueGuid &&
+                    !venue.Removed.Any())
                 .Select(venue => new
                 {
-                    venue.VenueGuid
+                    venue.VenueGuid,
+                    Description = venue.Descriptions
+                        .OrderByDescending(d => d.ModifiedDate)
+                        .FirstOrDefault()
                 })
                 .SingleOrDefaultAsync();
 
-            return result == null ? null : MapVenue(result.VenueGuid, null);
+            return result == null ? null : MapVenue(result.VenueGuid, result.Description);
         }
 
         private VenueInfo MapVenue(Guid venueGuid, VenueDescription venueDescription)
