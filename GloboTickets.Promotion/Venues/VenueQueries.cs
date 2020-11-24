@@ -30,7 +30,7 @@ namespace GloboTickets.Promotion.Venues
                 .ToListAsync();
 
             return result
-                .Select(row => MapVenue(row.VenueGuid, null))
+                .Select(row => MapVenue(row.VenueGuid, row.Description))
                 .ToList();
         }
 

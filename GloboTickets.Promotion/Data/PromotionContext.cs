@@ -1,4 +1,7 @@
-﻿using GloboTickets.Promotion.Venues;
+﻿using GloboTickets.Promotion.Acts;
+using GloboTickets.Promotion.Contents;
+using GloboTickets.Promotion.Shows;
+using GloboTickets.Promotion.Venues;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -13,12 +16,54 @@ namespace GloboTickets.Promotion.Data
         {
         }
 
-        public DbSet<GloboTickets.Promotion.Venues.Venue> Venue { get; set; }
+        public DbSet<Act> Act { get; set; }
+        public DbSet<Venue> Venue { get; set; }
+        public DbSet<Show> Show { get; set; }
+        public DbSet<Content> Content { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Act>()
+                .HasAlternateKey(act => new { act.ActGuid });
+
+            modelBuilder.Entity<ActRemoved>()
+                .HasAlternateKey(actRemoved => new { actRemoved.ActId, actRemoved.RemovedDate });
+
+            modelBuilder.Entity<ActDescription>()
+                .HasAlternateKey(actDescription => new { actDescription.ActId, actDescription.ModifiedDate });
+
             modelBuilder.Entity<Venue>()
-                .HasAlternateKey(v => new { v.VenueGuid });
+                .HasAlternateKey(venue => new { venue.VenueGuid });
+
+            modelBuilder.Entity<Show>()
+                .HasAlternateKey(show => new { show.ActId, show.VenueId, show.StartTime });
+
+            modelBuilder.Entity<ShowCancelled>()
+                .HasAlternateKey(showCancelled => new { showCancelled.ShowId, showCancelled.CancelledDate });
+
+            modelBuilder.Entity<Content>()
+                .HasKey(content => content.Hash);
+            modelBuilder.Entity<Content>()
+                .Property(content => content.Binary)
+                .IsRequired();
+        }
+
+        public async Task<Act> GetOrInsertAct(Guid actGuid)
+        {
+            var act = Act
+                .Include(act => act.Descriptions)
+                .Where(act => act.ActGuid == actGuid)
+                .SingleOrDefault();
+            if (act == null)
+            {
+                act = new Act
+                {
+                    ActGuid = actGuid
+                };
+                await AddAsync(act);
+            }
+
+            return act;
         }
 
         public async Task<Venue> GetOrInsertVenue(Guid venueGuid)
@@ -36,6 +81,28 @@ namespace GloboTickets.Promotion.Data
             }
 
             return venue;
+        }
+
+        public async Task<Show> GetOrInsertShow(Guid actGuid, Guid venueGuid, DateTimeOffset startTime)
+        {
+            var show = Show
+                .Where(show =>
+                    show.Act.ActGuid == actGuid &&
+                    show.Venue.VenueGuid == venueGuid &&
+                    show.StartTime == startTime)
+                .SingleOrDefault();
+            if (show == null)
+            {
+                show = new Show
+                {
+                    Act = await GetOrInsertAct(actGuid),
+                    Venue = await GetOrInsertVenue(venueGuid),
+                    StartTime = startTime
+                };
+                await base.AddAsync(show);
+            }
+
+            return show;
         }
     }
 }

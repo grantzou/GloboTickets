@@ -58,7 +58,6 @@ namespace GloboTickets.Promotion.Venues
             {
                 venue.VenueGuid = id;
                 await commands.SaveVenue(venue);
-                await Task.Delay(3000);
                 return RedirectToAction(nameof(Index));
             }
             return View(venue);
@@ -80,7 +79,7 @@ namespace GloboTickets.Promotion.Venues
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("VenueId,Name,City")] VenueInfo venue)
+        public async Task<IActionResult> Edit(Guid id, [Bind("VenueId,Name,City,LastModifiedTicks")] VenueInfo venue)
         {
             if (ModelState.IsValid)
             {
