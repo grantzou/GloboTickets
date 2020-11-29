@@ -1,0 +1,8 @@
+﻿using System;
+
+namespace GloboTickets.Promotion.Messages
+{
+    public class ShowAdded
+    {
+    }
+}
