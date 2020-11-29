@@ -11,6 +11,7 @@ namespace GloboTickets.Promotion.Venues
         public Guid VenueGuid { get; set; }
 
         public ICollection<VenueDescription> Descriptions { get; set; } = new List<VenueDescription>();
+        public ICollection<VenueLocation> Locations { get; set; } = new List<VenueLocation>();
         public ICollection<VenueRemoved> Removed { get; set; } = new List<VenueRemoved>();
     }
 }
