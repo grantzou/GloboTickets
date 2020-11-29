@@ -17,7 +17,11 @@ namespace GloboTickets.Promotion.Data
         }
 
         public DbSet<Act> Act { get; set; }
+        public DbSet<ActDescription> ActDescription { get; set; }
         public DbSet<Venue> Venue { get; set; }
+        public DbSet<VenueDescription> VenueDescription { get; set; }
+        public DbSet<VenueLocation> VenueLocation { get; set; }
+        public DbSet<VenueTimeZone> VenueTimeZone { get; set; }
         public DbSet<Show> Show { get; set; }
         public DbSet<Content> Content { get; set; }
 
@@ -35,6 +39,15 @@ namespace GloboTickets.Promotion.Data
             modelBuilder.Entity<Venue>()
                 .HasAlternateKey(venue => new { venue.VenueGuid });
 
+            modelBuilder.Entity<VenueDescription>()
+                .HasAlternateKey(venueDescription => new { venueDescription.VenueId, venueDescription.ModifiedDate });
+
+            modelBuilder.Entity<VenueLocation>()
+                .HasAlternateKey(venueLocation => new { venueLocation.VenueId, venueLocation.ModifiedDate });
+
+            modelBuilder.Entity<VenueTimeZone>()
+                .HasAlternateKey(venueTimeZone => new { venueTimeZone.VenueId, venueTimeZone.ModifiedDate });
+
             modelBuilder.Entity<Show>()
                 .HasAlternateKey(show => new { show.ActId, show.VenueId, show.StartTime });
 
@@ -51,7 +64,6 @@ namespace GloboTickets.Promotion.Data
         public async Task<Act> GetOrInsertAct(Guid actGuid)
         {
             var act = Act
-                .Include(act => act.Descriptions)
                 .Where(act => act.ActGuid == actGuid)
                 .SingleOrDefault();
             if (act == null)

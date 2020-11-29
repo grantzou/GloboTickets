@@ -1,8 +1,8 @@
+using GloboTickets.Promotion.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using GloboTickets.Promotion.Data;
 
 namespace GloboTickets.Promotion.Venues
 {
@@ -36,7 +36,8 @@ namespace GloboTickets.Promotion.Venues
 
         private async Task SaveVenueDescription(VenueInfo venueInfo, Venue venue)
         {
-            var lastVenueDescription = venue.Descriptions
+            var lastVenueDescription = repository.VenueDescription
+                .Where(venueDescription => venueDescription.VenueId == venue.VenueId)
                 .OrderByDescending(description => description.ModifiedDate)
                 .FirstOrDefault();
 
@@ -66,7 +67,8 @@ namespace GloboTickets.Promotion.Venues
             switch ((venueInfo.Latitude, venueInfo.Longitude))
             {
                 case (float latitude, float longitude):
-                    var lastVenueLocation = venue.Locations
+                    var lastVenueLocation = repository.VenueLocation
+                        .Where(venueLocation => venueLocation.VenueId == venue.VenueId)
                         .OrderByDescending(description => description.ModifiedDate)
                         .FirstOrDefault();
 
@@ -97,7 +99,8 @@ namespace GloboTickets.Promotion.Venues
         {
             if (!string.IsNullOrEmpty(venueInfo.TimeZone))
             {
-                var lastVenueTimeZone = venue.TimeZones
+                var lastVenueTimeZone = repository.VenueTimeZone
+                    .Where(venueTimeZone => venueTimeZone.VenueId == venue.VenueId)
                     .OrderByDescending(description => description.ModifiedDate)
                     .FirstOrDefault();
 
