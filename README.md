@@ -1,0 +1,49 @@
+# GloboTickets Example Application
+
+Example app for the course "Fundamentals of Distributed Systems" on Pluralsight, by Michael L Perry.
+
+## Setting Up a Mac
+
+To run on a Mac, you will need to run SQL Server in a Docker container.
+Install Docker Desktop for the Mac, and then pull the base image using `Scripts/pull.sh`.
+Then start up a container using `Scripts/startsql.sh`.
+
+To connect to that instance of SQL Server, you will need to change the connection string.
+The easiest way to do this is with User Secrets.
+Manage the user secrets for GloboTickets.Promotion.csproj.
+You can use the [.NET Core User Secrets](https://marketplace.visualstudio.com/items?itemName=adrianwilczynski.user-secrets) extension by Adrian Wilczyński.
+Set your user secrets file like this:
+
+```json
+{
+    "ConnectionStrings": {
+        "PromotionContext": "Data Source=.;Database=globotickets-promotion;User ID=sa;Password=Pass@word1;MultipleActiveResultSets=true"
+    }
+}
+```
+
+## Creating the Database
+
+Install the EF command-line tools in order to work with the application database.
+Run this command:
+
+```bash
+dotnet tool install --global dotnet-ef
+```
+
+Initialize the application database by running migrations.
+Use the following command:
+
+```bash
+dotnet ef database update --project GloboTickets.Promotion/
+```
+
+## Running the App
+
+Start up the Promotion Web application with this command:
+
+```bash
+dotnet run --project GloboTickets.Promotion
+```
+
+Or run GloboTickets.Promotion from Visual Studio.
