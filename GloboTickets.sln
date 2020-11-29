@@ -1,4 +1,4 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30711.63
 MinimumVisualStudioVersion = 15.0.26124.0
@@ -9,6 +9,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GloboTickets.Indexer", "GloboTickets.Indexer\GloboTickets.Indexer.csproj", "{77712E33-5481-4B7C-A63E-5A73D46CF09D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GloboTickets.Promotion.Messages", "GloboTickets.Promotion.Messages\GloboTickets.Promotion.Messages.csproj", "{E63603AD-2E6E-4CDF-9B90-6F8216A4EF7D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GloboTickets.Promotion.Messages.UnitTest", "GloboTickets.Promotion.Messages.UnitTest\GloboTickets.Promotion.Messages.UnitTest.csproj", "{2630AA38-397B-42F0-A368-560D3F51887F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +26,10 @@ Global
 		{545BDB81-D238-49D7-887F-22A1848AE6AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{545BDB81-D238-49D7-887F-22A1848AE6AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{545BDB81-D238-49D7-887F-22A1848AE6AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2630AA38-397B-42F0-A368-560D3F51887F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2630AA38-397B-42F0-A368-560D3F51887F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2630AA38-397B-42F0-A368-560D3F51887F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2630AA38-397B-42F0-A368-560D3F51887F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
