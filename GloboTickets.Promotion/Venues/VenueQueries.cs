@@ -51,7 +51,7 @@ namespace GloboTickets.Promotion.Venues
             return result == null ? null : MapVenue(result.VenueGuid, result.Description);
         }
 
-        private VenueInfo MapVenue(Guid venueGuid, VenueDescription venueDescription)
+        public static VenueInfo MapVenue(Guid venueGuid, VenueDescription venueDescription)
         {
             return new VenueInfo
             {

@@ -1,4 +1,5 @@
 ﻿using GloboTickets.Promotion.Data;
+using GloboTickets.Promotion.Venues;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -22,10 +23,20 @@ namespace GloboTickets.Promotion.Shows
                 .Where(show =>
                     show.Act.ActGuid == actGuid &&
                     !show.Cancelled.Any())
+                .Select(show => new
+                {
+                    VenueGuid = show.Venue.VenueGuid,
+                    VenueDescription = show.Venue.Descriptions
+                        .OrderByDescending(d => d.ModifiedDate)
+                        .FirstOrDefault(),
+                    StartTime = show.StartTime
+                })
                 .ToListAsync();
 
             return result.Select(show => new ShowInfo
             {
+                ActGuid = actGuid,
+                Venue = VenueQueries.MapVenue(show.VenueGuid, show.VenueDescription),
                 StartTime = show.StartTime
             })
                 .ToList();
