@@ -12,6 +12,7 @@ namespace GloboTickets.Promotion.Venues
 
         public ICollection<VenueDescription> Descriptions { get; set; } = new List<VenueDescription>();
         public ICollection<VenueLocation> Locations { get; set; } = new List<VenueLocation>();
+        public ICollection<VenueTimeZone> TimeZones { get; set; } = new List<VenueTimeZone>();
         public ICollection<VenueRemoved> Removed { get; set; } = new List<VenueRemoved>();
     }
 }
