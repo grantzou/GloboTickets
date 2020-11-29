@@ -36,7 +36,7 @@ namespace GloboTickets.Promotion.Shows
             return result.Select(show => new ShowInfo
             {
                 ActGuid = actGuid,
-                Venue = VenueQueries.MapVenue(show.VenueGuid, show.VenueDescription),
+                Venue = VenueInfo.FromEntities(show.VenueGuid, show.VenueDescription),
                 StartTime = show.StartTime
             })
                 .ToList();

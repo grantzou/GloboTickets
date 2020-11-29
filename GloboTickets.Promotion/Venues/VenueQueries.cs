@@ -30,7 +30,7 @@ namespace GloboTickets.Promotion.Venues
                 .ToListAsync();
 
             return result
-                .Select(row => MapVenue(row.VenueGuid, row.Description))
+                .Select(row => VenueInfo.FromEntities(row.VenueGuid, row.Description))
                 .ToList();
         }
 
@@ -44,11 +44,18 @@ namespace GloboTickets.Promotion.Venues
                     venue.VenueGuid,
                     Description = venue.Descriptions
                         .OrderByDescending(d => d.ModifiedDate)
+                        .FirstOrDefault(),
+                    Location = venue.Locations
+                        .OrderByDescending(d => d.ModifiedDate)
+                        .FirstOrDefault(),
+                    TimeZone = venue.TimeZones
+                        .OrderByDescending(d => d.ModifiedDate)
                         .FirstOrDefault()
                 })
                 .SingleOrDefaultAsync();
 
-            return result == null ? null : MapVenue(result.VenueGuid, result.Description);
+            return result == null ? null : VenueInfo.FromEntities(
+                result.VenueGuid, result.Description, result.Location, result.TimeZone);
         }
 
         public static VenueInfo MapVenue(Guid venueGuid, VenueDescription venueDescription)

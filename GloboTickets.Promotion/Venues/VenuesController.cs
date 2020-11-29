@@ -1,7 +1,9 @@
 using GloboTickets.Promotion.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -44,7 +46,11 @@ namespace GloboTickets.Promotion.Venues
             {
                 return RedirectToAction(nameof(Create), new { id = Guid.NewGuid() });
             }
-            return View();
+            var viewModel = new VenueViewModel
+            {
+                TimeZones = AllTimeZones
+            };
+            return View(viewModel);
         }
 
         // POST: Venues/Create
@@ -52,15 +58,16 @@ namespace GloboTickets.Promotion.Venues
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Guid id, [Bind("VenueId,Name,City")] VenueInfo venue)
+        public async Task<IActionResult> Create(Guid id, [Bind("Venue")] VenueViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
+                var venue = viewModel.Venue;
                 venue.VenueGuid = id;
                 await commands.SaveVenue(venue);
                 return RedirectToAction(nameof(Index));
             }
-            return View(venue);
+            return View(viewModel);
         }
 
         // GET: Venues/Edit/abc-123
@@ -71,7 +78,12 @@ namespace GloboTickets.Promotion.Venues
             {
                 return NotFound();
             }
-            return View(venue);
+            var viewModel = new VenueViewModel
+            {
+                Venue = venue,
+                TimeZones = AllTimeZones
+            };
+            return View(viewModel);
         }
 
         // POST: Venues/Edit/abc-123
@@ -79,15 +91,16 @@ namespace GloboTickets.Promotion.Venues
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("VenueId,Name,City,LastModifiedTicks")] VenueInfo venue)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Venue")] VenueViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
+                var venue = viewModel.Venue;
                 venue.VenueGuid = id;
                 await commands.SaveVenue(venue);
                 return RedirectToAction(nameof(Index));
             }
-            return View(venue);
+            return View(viewModel);
         }
 
         // GET: Venues/Delete/abc-123
@@ -110,5 +123,13 @@ namespace GloboTickets.Promotion.Venues
             await commands.DeleteVenue(id);
             return RedirectToAction(nameof(Index));
         }
+
+        private static List<SelectListItem> AllTimeZones =>
+            TimeZoneInfo.GetSystemTimeZones()
+                .Select(timeZone => new SelectListItem
+                {
+                    Value = timeZone.Id,
+                    Text = $"{timeZone.DisplayName} ({timeZone.Id})"
+                }).ToList();
     }
 }
