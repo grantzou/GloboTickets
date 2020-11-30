@@ -85,5 +85,24 @@ namespace GloboTickets.Promotion.Shows
                 return View(viewModel);
             }
         }
+
+        [HttpGet("Shows/Delete/{act}/{venue}/{starttime}", Name = "DeleteShow")]
+        public async Task<IActionResult> Delete(Guid act, Guid venue, DateTimeOffset starttime)
+        {
+            var show = await showQueries.GetShow(act, venue, starttime);
+            if (show == null)
+            {
+                return NotFound();
+            }
+
+            return View(show);
+        }
+
+        [HttpPost("Shows/Delete/{act}/{venue}/{starttime}")]
+        public async Task<IActionResult> DeleteConfirmed(Guid act, Guid venue, DateTimeOffset starttime)
+        {
+            await showCommands.CancelShow(act, venue, starttime);
+            return RedirectToAction("Details", "Acts", new { id = act });
+        }
     }
 }

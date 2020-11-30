@@ -41,5 +41,30 @@ namespace GloboTickets.Promotion.Shows
             })
                 .ToList();
         }
+
+        public async Task<ShowInfo> GetShow(Guid actGuid, Guid venueGuid, DateTimeOffset startTime)
+        {
+            var result = await repository.Show
+                .Where(show =>
+                    show.Act.ActGuid == actGuid &&
+                    show.Venue.VenueGuid == venueGuid &&
+                    show.StartTime == startTime &&
+                    !show.Cancelled.Any())
+                .Select(show => new
+                {
+                    VenueGuid = show.Venue.VenueGuid,
+                    VenueDescription = show.Venue.Descriptions
+                        .OrderByDescending(d => d.ModifiedDate)
+                        .FirstOrDefault()
+                })
+                .SingleOrDefaultAsync();
+
+            return result == null ? null : new ShowInfo
+            {
+                ActGuid = actGuid,
+                Venue = VenueInfo.FromEntities(result.VenueGuid, result.VenueDescription),
+                StartTime = startTime
+            };
+        }
     }
 }

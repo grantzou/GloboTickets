@@ -63,18 +63,7 @@
                 @Html.DisplayFor(modelItem => item.StartTime)
             </td>
             <td>
-                <a asp-action="EditShow"
-                    asp-route-act="@item.ActGuid"
-                    asp-route-venue="@item.Venue.VenueGuid"
-                    asp-route-starttime="@item.StartTime">Edit</a> |
-                <a asp-action="DetailsShow" 
-                    asp-route-act="@item.ActGuid"
-                    asp-route-venue="@item.Venue.VenueGuid"
-                    asp-route-starttime="@item.StartTime">Details</a> |
-                <a asp-action="DeleteShow"
-                    asp-route-act="@item.ActGuid"
-                    asp-route-venue="@item.Venue.VenueGuid"
-                    asp-route-starttime="@item.StartTime">Delete</a>
+                <a href="~/Shows/Delete/@item.ActGuid/@item.Venue.VenueGuid/@item.StartTime.ToString("o")">Delete</a>
             </td>
         </tr>
 }
