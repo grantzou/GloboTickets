@@ -7,5 +7,6 @@ namespace GloboTickets.Promotion.Messages.Venues
         public Guid venueGuid { get; set; }
         public VenueDescriptionRepresentation description { get; set; }
         public VenueLocationRepresentation location { get; set; }
+        public VenueTimeZoneRepresentation timeZone { get; set; }
     }
 }

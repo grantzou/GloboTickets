@@ -1,12 +1,29 @@
-﻿using System;
+﻿using GloboTickets.Promotion.Messages.Shows;
+using MassTransit;
+using System;
+using System.Threading.Tasks;
 
 namespace GloboTickets.Indexer
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var bus = Bus.Factory.CreateUsingRabbitMq(busConfig =>
+            {
+                busConfig.Host("rabbitmq://localhost");
+                busConfig.ReceiveEndpoint("globotickets", endpointConfig =>
+                {
+                    endpointConfig.Handler<ShowAdded>(async context => await new ShowAddedHandler().Handle(context.Message));
+                });
+            });
+
+            await bus.StartAsync();
+
+            Console.WriteLine("Receiving messages. Press a key to stop.");
+            await Task.Run(() => Console.ReadKey());
+
+            await bus.StopAsync();
         }
     }
 }

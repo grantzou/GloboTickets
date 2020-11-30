@@ -1,19 +1,25 @@
 ﻿using GloboTickets.Promotion.Acts;
 using GloboTickets.Promotion.Contents;
+using GloboTickets.Promotion.Messages.Shows;
 using GloboTickets.Promotion.Shows;
 using GloboTickets.Promotion.Venues;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GloboTickets.Promotion.Data
 {
     public class PromotionContext : DbContext
     {
-        public PromotionContext (DbContextOptions<PromotionContext> options)
+        private readonly Dispatcher dispatcher;
+
+        public PromotionContext(DbContextOptions<PromotionContext> options, Dispatcher dispatcher)
             : base(options)
         {
+            this.dispatcher = dispatcher;
         }
 
         public DbSet<Act> Act { get; set; }
@@ -59,6 +65,23 @@ namespace GloboTickets.Promotion.Data
             modelBuilder.Entity<Content>()
                 .Property(content => content.Binary)
                 .IsRequired();
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var entitiesAdded = ChangeTracker.Entries()
+                .Where(e => e.State == EntityState.Added)
+                .Select(e => e.Entity)
+                .ToList();
+
+            int result = await base.SaveChangesAsync(cancellationToken);
+
+            foreach (var entityAdded in entitiesAdded)
+            {
+                await dispatcher.Dispatch(entityAdded);
+            }
+
+            return result;
         }
 
         public async Task<Act> GetOrInsertAct(Guid actGuid)
