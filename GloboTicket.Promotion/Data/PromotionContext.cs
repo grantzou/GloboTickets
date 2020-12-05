@@ -87,6 +87,7 @@ namespace GloboTicket.Promotion.Data
         public async Task<Act> GetOrInsertAct(Guid actGuid)
         {
             var act = Act
+                .Include(act => act.Descriptions)
                 .Where(act => act.ActGuid == actGuid)
                 .SingleOrDefault();
             if (act == null)
@@ -104,6 +105,9 @@ namespace GloboTicket.Promotion.Data
         public async Task<Venue> GetOrInsertVenue(Guid venueGuid)
         {
             var venue = Venue
+                .Include(venue => venue.Descriptions)
+                .Include(venue => venue.Locations)
+                .Include(venue => venue.TimeZones)
                 .Where(venue => venue.VenueGuid == venueGuid)
                 .SingleOrDefault();
             if (venue == null)
