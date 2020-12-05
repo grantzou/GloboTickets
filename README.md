@@ -1,4 +1,4 @@
-# GloboTickets Example Application
+# GloboTicket Example Application
 
 Example app for the course "Fundamentals of Distributed Systems" on Pluralsight, by Michael L Perry.
 
@@ -10,14 +10,14 @@ Then start up a container using `Scripts/startsql.sh`.
 
 To connect to that instance of SQL Server, you will need to change the connection string.
 The easiest way to do this is with User Secrets.
-Manage the user secrets for GloboTickets.Promotion.csproj.
+Manage the user secrets for GloboTicket.Promotion.csproj.
 You can use the [.NET Core User Secrets](https://marketplace.visualstudio.com/items?itemName=adrianwilczynski.user-secrets) extension by Adrian Wilczyński.
 Set your user secrets file like this:
 
 ```json
 {
     "ConnectionStrings": {
-        "PromotionContext": "Data Source=.;Database=globotickets-promotion;User ID=sa;Password=Pass@word1;MultipleActiveResultSets=true"
+        "PromotionContext": "Data Source=.;Database=GloboTicket-promotion;User ID=sa;Password=Pass@word1;MultipleActiveResultSets=true"
     }
 }
 ```
@@ -35,7 +35,7 @@ Initialize the application database by running migrations.
 Use the following command:
 
 ```bash
-dotnet ef database update --project GloboTickets.Promotion/
+dotnet ef database update --project GloboTicket.Promotion/
 ```
 
 ## Running the App
@@ -43,7 +43,7 @@ dotnet ef database update --project GloboTickets.Promotion/
 Start up the Promotion Web application with this command:
 
 ```bash
-dotnet run --project GloboTickets.Promotion
+dotnet run --project GloboTicket.Promotion
 ```
 
-Or run GloboTickets.Promotion from Visual Studio.
+Or run GloboTicket.Promotion from Visual Studio.
