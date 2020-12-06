@@ -1,5 +1,7 @@
 ﻿using GloboTicket.Promotion.Messages.Shows;
+using GreenPipes;
 using MassTransit;
+using Nest;
 using System;
 using System.Threading.Tasks;
 
@@ -9,13 +11,24 @@ namespace GloboTicket.Indexer
     {
         static async Task Main(string[] args)
         {
+            var settings = new ConnectionSettings(new Uri("http://localhost:9200"))
+                .DefaultIndex("shows");
+            var elasticClient = new ElasticClient(settings);
+            var showAddedHandler = new ShowAddedHandler(elasticClient);
+
             var bus = Bus.Factory.CreateUsingRabbitMq(busConfig =>
             {
                 busConfig.Host("rabbitmq://localhost");
                 busConfig.ReceiveEndpoint("GloboTicket.Indexer", endpointConfig =>
                 {
+                    endpointConfig.UseMessageRetry(r => r.Exponential(
+                        retryLimit: 5,
+                        minInterval: TimeSpan.FromSeconds(5),
+                        maxInterval: TimeSpan.FromSeconds(30),
+                        intervalDelta: TimeSpan.FromSeconds(5)));
+
                     endpointConfig.Handler<ShowAdded>(async context =>
-                        await new ShowAddedHandler().Handle(context.Message));
+                        await showAddedHandler.Handle(context.Message));
                 });
             });
 

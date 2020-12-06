@@ -47,3 +47,42 @@ dotnet run --project GloboTicket.Promotion
 ```
 
 Or run GloboTicket.Promotion from Visual Studio.
+
+## Running the Emailer
+
+The Emailer is a mock service that stands in for a process that emails about new shows.
+It uses MassTransit to manage RabbitMQ.
+To start RabbitMQ, create a Docker container.
+On Mac, run the shell script:
+
+```bash
+Scripts/startrabbitmq.sh
+```
+
+On Windows, run the PowerShell script:
+
+```powershell
+Scripts\startrabbitmq.ps1
+```
+
+Then start the Emailer and schedule a show.
+
+## Running the Indexer
+
+The Indexer also requires RabbitMQ.
+Follow the instructions above for the Emailer.
+In addition, the Indexer requires Elasticsearch.
+On Mac, run the shell script:
+
+```bash
+Scripts/startelasticsearch.sh
+```
+
+On Windows, run the PowerShell script:
+
+```powershell
+Scripts\Start-Elasticsearch.ps1
+```
+
+Visit [http://localhost:9200](http://localhost:9200) in your browser to verify that it is running.
+Then schedule a show and query Elasticsearch at [http://localhost:9200/shows/_search?pretty](http://localhost:9200/shows/_search?pretty).
