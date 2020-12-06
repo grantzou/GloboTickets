@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GloboTicket.Promotion.Messa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GloboTicket.Emailer", "GloboTicket.Emailer\GloboTicket.Emailer.csproj", "{FCD65874-8632-4C2E-97DF-265B08DC3497}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GloboTicket.Indexer.UnitTest", "GloboTicket.Indexer.UnitTest\GloboTicket.Indexer.UnitTest.csproj", "{7A930C25-82B8-4645-AE34-D174850C2F8D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,10 @@ Global
 		{FCD65874-8632-4C2E-97DF-265B08DC3497}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCD65874-8632-4C2E-97DF-265B08DC3497}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCD65874-8632-4C2E-97DF-265B08DC3497}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A930C25-82B8-4645-AE34-D174850C2F8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A930C25-82B8-4645-AE34-D174850C2F8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A930C25-82B8-4645-AE34-D174850C2F8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A930C25-82B8-4645-AE34-D174850C2F8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

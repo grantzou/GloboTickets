@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace GloboTicket.Indexer
 {
-    class ShowAddedHandler
+    public class ShowAddedHandler
     {
         private readonly IRepository repository;
 
@@ -13,12 +13,12 @@ namespace GloboTicket.Indexer
             this.repository = repository;
         }
 
-        public async Task Handle(ShowAdded message)
+        public async Task Handle(ShowAdded showAdded)
         {
-            Console.WriteLine($"Indexing a show for {message.act.description.title} at {message.venue.description.name}.");
+            Console.WriteLine($"Indexing a show for {showAdded.act.description.title} at {showAdded.venue.description.name}.");
             try
             {
-                await repository.IndexShow(message);
+                await repository.IndexShow(showAdded);
                 Console.WriteLine("Succeeded");
             }
             catch (Exception ex)

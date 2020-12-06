@@ -5,6 +5,6 @@ namespace GloboTicket.Indexer
 {
     public interface IRepository
     {
-        Task IndexShow(ShowAdded message);
+        Task IndexShow(ShowAdded showAdded);
     }
 }
