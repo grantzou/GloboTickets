@@ -14,7 +14,15 @@ namespace GloboTicket.Promotion.Data
             this.serviceProvider = serviceProvider;
         }
 
-        public async Task Dispatch(object entityAdded)
+        public async Task DispatchAll(IEnumerable<object> entitiesAdded)
+        {
+            foreach (var entityAdded in entitiesAdded)
+            {
+                await Dispatch(entityAdded);
+            }
+        }
+
+        private async Task Dispatch(object entityAdded)
         {
             var notifierType = typeof(INotifier<>).MakeGenericType(entityAdded.GetType());
             var notifyDispatcherType = typeof(NotifyDispatcher<>).MakeGenericType(entityAdded.GetType());

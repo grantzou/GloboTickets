@@ -6,6 +6,7 @@ using GloboTicket.Promotion.Venues;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -78,10 +79,7 @@ namespace GloboTicket.Promotion.Data
 
             if (dispatcher != null)
             {
-                foreach (var entityAdded in entitiesAdded)
-                {
-                    await dispatcher.Dispatch(entityAdded);
-                }
+                await dispatcher.DispatchAll(entitiesAdded);
             }
 
             return result;
