@@ -12,9 +12,10 @@ namespace GloboTicket.Indexer
             var bus = Bus.Factory.CreateUsingRabbitMq(busConfig =>
             {
                 busConfig.Host("rabbitmq://localhost");
-                busConfig.ReceiveEndpoint("GloboTicket", endpointConfig =>
+                busConfig.ReceiveEndpoint("GloboTicket.Indexer", endpointConfig =>
                 {
-                    endpointConfig.Handler<ShowAdded>(async context => await new ShowAddedHandler().Handle(context.Message));
+                    endpointConfig.Handler<ShowAdded>(async context =>
+                        await new ShowAddedHandler().Handle(context.Message));
                 });
             });
 
