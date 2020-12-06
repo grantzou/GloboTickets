@@ -76,9 +76,12 @@ namespace GloboTicket.Promotion.Data
 
             int result = await base.SaveChangesAsync(cancellationToken);
 
-            foreach (var entityAdded in entitiesAdded)
+            if (dispatcher != null)
             {
-                await dispatcher.Dispatch(entityAdded);
+                foreach (var entityAdded in entitiesAdded)
+                {
+                    await dispatcher.Dispatch(entityAdded);
+                }
             }
 
             return result;
