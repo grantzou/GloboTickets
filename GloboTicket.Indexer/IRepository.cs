@@ -1,4 +1,6 @@
-﻿using GloboTicket.Promotion.Messages.Shows;
+﻿using GloboTicket.Promotion.Messages.Acts;
+using GloboTicket.Promotion.Messages.Shows;
+using System;
 using System.Threading.Tasks;
 
 namespace GloboTicket.Indexer
@@ -6,5 +8,6 @@ namespace GloboTicket.Indexer
     public interface IRepository
     {
         Task IndexShow(ShowAdded showAdded);
+        Task UpdateShowsWithActDescription(Guid actGuid, ActDescriptionRepresentation description);
     }
 }

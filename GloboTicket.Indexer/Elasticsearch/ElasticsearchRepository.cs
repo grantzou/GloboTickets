@@ -1,4 +1,6 @@
-﻿using GloboTicket.Promotion.Messages.Shows;
+﻿using Elasticsearch.Net;
+using GloboTicket.Promotion.Messages.Acts;
+using GloboTicket.Promotion.Messages.Shows;
 using Nest;
 using System;
 using System.Threading.Tasks;
@@ -21,6 +23,26 @@ namespace GloboTicket.Indexer.Elasticsearch
             {
                 throw new InvalidOperationException($"Error indexing show: {response.DebugInformation}");
             }
+        }
+
+        public async Task UpdateShowsWithActDescription(Guid actGuid, ActDescriptionRepresentation description)
+        {
+            await elasticClient.UpdateByQueryAsync<ShowAdded>(ubq => ubq
+                .Query(q => q
+                    .Match(m => m
+                        .Field(f => f.act.actGuid)
+                        .Query(actGuid.ToString())
+                    )
+                )
+                .Script(s => s
+                    .Source("ctx._source.act.description = params.description")
+                    .Params(p => p
+                        .Add("description", description)
+                    )
+                )
+                .Conflicts(Conflicts.Proceed)
+                .Refresh(true)
+            );
         }
     }
 }
