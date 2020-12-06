@@ -1,5 +1,4 @@
 ﻿using GloboTicket.Promotion.Messages.Shows;
-using Nest;
 using System;
 using System.Threading.Tasks;
 
@@ -7,25 +6,25 @@ namespace GloboTicket.Indexer
 {
     class ShowAddedHandler
     {
-        private readonly ElasticClient elasticClient;
+        private readonly IRepository repository;
 
-        public ShowAddedHandler(ElasticClient elasticClient)
+        public ShowAddedHandler(IRepository repository)
         {
-            this.elasticClient = elasticClient;
+            this.repository = repository;
         }
 
         public async Task Handle(ShowAdded message)
         {
             Console.WriteLine($"Indexing a show for {message.act.description.title} at {message.venue.description.name}.");
-            var response = await elasticClient.IndexDocumentAsync(message);
-            if (response.IsValid)
+            try
             {
+                await repository.IndexShow(message);
                 Console.WriteLine("Succeeded");
             }
-            else
+            catch (Exception ex)
             {
-                Console.WriteLine($"Error indexing show: {response.DebugInformation}");
-                throw new InvalidOperationException("Indexer failed");
+                Console.WriteLine(ex.Message);
+                throw;
             }
         }
     }

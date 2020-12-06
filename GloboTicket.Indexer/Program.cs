@@ -1,4 +1,5 @@
-﻿using GloboTicket.Promotion.Messages.Shows;
+﻿using GloboTicket.Indexer.Elasticsearch;
+using GloboTicket.Promotion.Messages.Shows;
 using GreenPipes;
 using MassTransit;
 using Nest;
@@ -14,7 +15,8 @@ namespace GloboTicket.Indexer
             var settings = new ConnectionSettings(new Uri("http://localhost:9200"))
                 .DefaultIndex("shows");
             var elasticClient = new ElasticClient(settings);
-            var showAddedHandler = new ShowAddedHandler(elasticClient);
+            var elasticsearchRepository = new ElasticsearchRepository(elasticClient);
+            var showAddedHandler = new ShowAddedHandler(elasticsearchRepository);
 
             var bus = Bus.Factory.CreateUsingRabbitMq(busConfig =>
             {
