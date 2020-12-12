@@ -1,7 +1,7 @@
 ﻿using GloboTicket.Indexer.Documents;
 using System.Threading.Tasks;
 
-namespace GloboTicket.Indexer
+namespace GloboTicket.Indexer.Updaters
 {
     public class ActUpdater
     {

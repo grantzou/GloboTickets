@@ -1,5 +1,6 @@
 using FluentAssertions;
 using GloboTicket.Indexer.Handlers;
+using GloboTicket.Indexer.Updaters;
 using GloboTicket.Promotion.Messages.Acts;
 using GloboTicket.Promotion.Messages.Shows;
 using GloboTicket.Promotion.Messages.Venues;
@@ -23,8 +24,10 @@ namespace GloboTicket.Indexer.UnitTest
         {
             repository = new InMemoryRepository();
             var actUpdater = new ActUpdater(repository);
+            var venueUpdater = new VenueUpdater(repository);
             showAddedHandler = new ShowAddedHandler(repository, actUpdater);
             actDescriptionChangedHandler = new ActDescriptionChangedHandler(repository, actUpdater);
+            var venueDescriptionChangedHandler = new VenueDescriptionChangedHandler(repository, venueUpdater);
         }
 
         [Fact]

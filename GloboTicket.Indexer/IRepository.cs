@@ -5,9 +5,14 @@ namespace GloboTicket.Indexer
 {
     public interface IRepository
     {
-        Task IndexShow(ShowDocument show);
-        Task UpdateShowsWithActDescription(string actGuid, ActDescription actDescription);
+        Task<VenueDocument> GetVenue(string venueGuid);
         Task<ActDocument> GetAct(string actGuid);
+
+        Task IndexVenue(VenueDocument venue);
         Task IndexAct(ActDocument act);
+        Task IndexShow(ShowDocument show);
+
+        Task UpdateShowsWithVenueDescription(string venueGuid, VenueDescription description);
+        Task UpdateShowsWithActDescription(string actGuid, ActDescription actDescription);
     }
 }

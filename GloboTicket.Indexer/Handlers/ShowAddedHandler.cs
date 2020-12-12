@@ -1,4 +1,5 @@
 ﻿using GloboTicket.Indexer.Documents;
+using GloboTicket.Indexer.Updaters;
 using GloboTicket.Promotion.Messages.Shows;
 using System;
 using System.Threading.Tasks;

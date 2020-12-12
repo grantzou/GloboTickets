@@ -13,9 +13,19 @@ namespace GloboTicket.Indexer.UnitTest
 
         public ICollection<ShowDocument> Shows => shows;
 
+        public Task<VenueDocument> GetVenue(string venueGuid)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public Task<ActDocument> GetAct(string actGuid)
         {
             return Task.FromResult(acts.SingleOrDefault(act => act.ActGuid == actGuid));
+        }
+
+        public Task IndexVenue(VenueDocument venue)
+        {
+            throw new System.NotImplementedException();
         }
 
         public Task IndexAct(ActDocument act)
@@ -33,6 +43,11 @@ namespace GloboTicket.Indexer.UnitTest
                 s.StartTime == ShowDocument.StartTime);
             shows.Add(DeepCopy(ShowDocument));
             return Task.CompletedTask;
+        }
+
+        public Task UpdateShowsWithVenueDescription(string venueGuid, VenueDescription description)
+        {
+            throw new System.NotImplementedException();
         }
 
         public Task UpdateShowsWithActDescription(string actGuid, ActDescription actDescription)

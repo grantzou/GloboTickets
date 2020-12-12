@@ -18,12 +18,26 @@ namespace GloboTicket.Indexer.Elasticsearch
             this.elasticClient = elasticClient;
         }
 
+        public async Task<VenueDocument> GetVenue(string venueGuid)
+        {
+            var id = HashOfKey(new { VenueGuid = venueGuid });
+            var response = await elasticClient.GetAsync<VenueDocument>(id);
+
+            return response.Found ? response.Source : null;
+        }
+
         public async Task<ActDocument> GetAct(string actGuid)
         {
             var id = HashOfKey(new { ActGuid = actGuid });
             var response = await elasticClient.GetAsync<ActDocument>(id);
 
             return response.Found ? response.Source : null;
+        }
+
+        public async Task IndexVenue(VenueDocument venue)
+        {
+            venue.Id = HashOfKey(new { VenueGuid = venue.VenueGuid });
+            await elasticClient.IndexDocumentAsync(venue);
         }
 
         public async Task IndexAct(ActDocument act)
@@ -40,6 +54,11 @@ namespace GloboTicket.Indexer.Elasticsearch
             {
                 throw new InvalidOperationException($"Error indexing show: {response.DebugInformation}");
             }
+        }
+
+        public Task UpdateShowsWithVenueDescription(string venueGuid, VenueDescription description)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task UpdateShowsWithActDescription(string actGuid, ActDescription description)

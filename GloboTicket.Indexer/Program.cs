@@ -1,8 +1,10 @@
 ﻿using GloboTicket.Indexer.Documents;
 using GloboTicket.Indexer.Elasticsearch;
 using GloboTicket.Indexer.Handlers;
+using GloboTicket.Indexer.Updaters;
 using GloboTicket.Promotion.Messages.Acts;
 using GloboTicket.Promotion.Messages.Shows;
+using GloboTicket.Promotion.Messages.Venues;
 using GreenPipes;
 using MassTransit;
 using Nest;
@@ -28,8 +30,10 @@ namespace GloboTicket.Indexer
             var elasticClient = new ElasticClient(settings);
             var elasticsearchRepository = new ElasticsearchRepository(elasticClient);
             var actUpdater = new ActUpdater(elasticsearchRepository);
+            var venueUpdater = new VenueUpdater(elasticsearchRepository);
             var showAddedHandler = new ShowAddedHandler(elasticsearchRepository, actUpdater);
             var actDescriptionChangedHandler = new ActDescriptionChangedHandler(elasticsearchRepository, actUpdater);
+            var venueDescriptionChangedHandler = new VenueDescriptionChangedHandler(elasticsearchRepository, venueUpdater);
 
             var bus = Bus.Factory.CreateUsingRabbitMq(busConfig =>
             {
@@ -46,6 +50,8 @@ namespace GloboTicket.Indexer
                         await showAddedHandler.Handle(context.Message));
                     endpointConfig.Handler<ActDescriptionChanged>(async context =>
                         await actDescriptionChangedHandler.Handle(context.Message));
+                    endpointConfig.Handler<VenueDescriptionChanged>(async context =>
+                        await venueDescriptionChangedHandler.Handle(context.Message));
                 });
             });
 
