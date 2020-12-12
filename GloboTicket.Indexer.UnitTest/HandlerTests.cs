@@ -22,8 +22,9 @@ namespace GloboTicket.Indexer.UnitTest
         public HandlerTests()
         {
             repository = new InMemoryRepository();
-            showAddedHandler = new ShowAddedHandler(repository);
-            actDescriptionChangedHandler = new ActDescriptionChangedHandler(repository);
+            var actUpdater = new ActUpdater(repository);
+            showAddedHandler = new ShowAddedHandler(repository, actUpdater);
+            actDescriptionChangedHandler = new ActDescriptionChangedHandler(repository, actUpdater);
         }
 
         [Fact]

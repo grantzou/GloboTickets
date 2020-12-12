@@ -15,9 +15,9 @@ namespace GloboTicket.Indexer.UnitTest
 
         public ICollection<ShowAdded> Shows => shows;
 
-        public async Task<ActRepresentation> GetAct(Guid actGuid)
+        public Task<ActRepresentation> GetAct(Guid actGuid)
         {
-            return acts.SingleOrDefault(act => act.actGuid == actGuid);
+            return Task.FromResult(acts.SingleOrDefault(act => act.actGuid == actGuid));
         }
 
         public Task IndexAct(ActRepresentation act)

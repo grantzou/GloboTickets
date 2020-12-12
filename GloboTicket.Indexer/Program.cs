@@ -17,8 +17,9 @@ namespace GloboTicket.Indexer
                 .DefaultIndex("shows");
             var elasticClient = new ElasticClient(settings);
             var elasticsearchRepository = new ElasticsearchRepository(elasticClient);
-            var showAddedHandler = new ShowAddedHandler(elasticsearchRepository);
-            var actDescriptionChangedHandler = new ActDescriptionChangedHandler(elasticsearchRepository);
+            var actUpdater = new ActUpdater(elasticsearchRepository);
+            var showAddedHandler = new ShowAddedHandler(elasticsearchRepository, actUpdater);
+            var actDescriptionChangedHandler = new ActDescriptionChangedHandler(elasticsearchRepository, actUpdater);
 
             var bus = Bus.Factory.CreateUsingRabbitMq(busConfig =>
             {

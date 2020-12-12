@@ -7,10 +7,12 @@ namespace GloboTicket.Indexer
     public class ActDescriptionChangedHandler
     {
         private readonly IRepository repository;
+        private readonly ActUpdater actUpdater;
 
-        public ActDescriptionChangedHandler(IRepository repository)
+        public ActDescriptionChangedHandler(IRepository repository, ActUpdater actUpdater)
         {
             this.repository = repository;
+            this.actUpdater = actUpdater;
         }
 
         public async Task Handle(ActDescriptionChanged actDescriptionChanged)
@@ -18,16 +20,8 @@ namespace GloboTicket.Indexer
             Console.WriteLine($"Updating index for act {actDescriptionChanged.description.title}.");
             try
             {
-                ActRepresentation act = await repository.GetAct(actDescriptionChanged.actGuid);
-                if (act == null || act.description.modifiedDate < actDescriptionChanged.description.modifiedDate)
-                {
-                    await repository.IndexAct(new ActRepresentation
-                    {
-                        actGuid = actDescriptionChanged.actGuid,
-                        description = actDescriptionChanged.description
-                    });
-                }
-                await repository.UpdateShowsWithActDescription(actDescriptionChanged.actGuid, actDescriptionChanged.description);
+                ActRepresentation act = await actUpdater.UpdateAndGetLatestAct(actDescriptionChanged.actGuid, actDescriptionChanged.description);
+                await repository.UpdateShowsWithActDescription(act.actGuid, act.description);
                 Console.WriteLine("Succeeded");
             }
             catch (Exception ex)

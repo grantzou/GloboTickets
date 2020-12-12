@@ -8,10 +8,12 @@ namespace GloboTicket.Indexer
     public class ShowAddedHandler
     {
         private readonly IRepository repository;
+        private readonly ActUpdater actUpdater;
 
-        public ShowAddedHandler(IRepository repository)
+        public ShowAddedHandler(IRepository repository, ActUpdater actUpdater)
         {
             this.repository = repository;
+            this.actUpdater = actUpdater;
         }
 
         public async Task Handle(ShowAdded showAdded)
@@ -19,15 +21,8 @@ namespace GloboTicket.Indexer
             Console.WriteLine($"Indexing a show for {showAdded.act.description.title} at {showAdded.venue.description.name}.");
             try
             {
-                ActRepresentation act = await repository.GetAct(showAdded.act.actGuid);
-                if (act == null || act.description.modifiedDate < showAdded.act.description.modifiedDate)
-                {
-                    await repository.IndexAct(showAdded.act);
-                }
-                else
-                {
-                    showAdded.act = act;
-                }
+                ActRepresentation act = await actUpdater.UpdateAndGetLatestAct(showAdded.act.actGuid, showAdded.act.description);
+                showAdded.act = act;
                 await repository.IndexShow(showAdded);
                 Console.WriteLine("Succeeded");
             }
