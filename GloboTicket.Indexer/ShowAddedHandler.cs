@@ -1,4 +1,5 @@
-﻿using GloboTicket.Promotion.Messages.Shows;
+﻿using GloboTicket.Promotion.Messages.Acts;
+using GloboTicket.Promotion.Messages.Shows;
 using System;
 using System.Threading.Tasks;
 
@@ -18,6 +19,15 @@ namespace GloboTicket.Indexer
             Console.WriteLine($"Indexing a show for {showAdded.act.description.title} at {showAdded.venue.description.name}.");
             try
             {
+                ActRepresentation act = await repository.GetAct(showAdded.act.actGuid);
+                if (act == null || act.description.modifiedDate < showAdded.act.description.modifiedDate)
+                {
+                    await repository.IndexAct(showAdded.act);
+                }
+                else
+                {
+                    showAdded.act = act;
+                }
                 await repository.IndexShow(showAdded);
                 Console.WriteLine("Succeeded");
             }

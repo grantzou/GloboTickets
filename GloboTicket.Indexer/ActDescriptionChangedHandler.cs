@@ -18,6 +18,15 @@ namespace GloboTicket.Indexer
             Console.WriteLine($"Updating index for act {actDescriptionChanged.description.title}.");
             try
             {
+                ActRepresentation act = await repository.GetAct(actDescriptionChanged.actGuid);
+                if (act == null || act.description.modifiedDate < actDescriptionChanged.description.modifiedDate)
+                {
+                    await repository.IndexAct(new ActRepresentation
+                    {
+                        actGuid = actDescriptionChanged.actGuid,
+                        description = actDescriptionChanged.description
+                    });
+                }
                 await repository.UpdateShowsWithActDescription(actDescriptionChanged.actGuid, actDescriptionChanged.description);
                 Console.WriteLine("Succeeded");
             }

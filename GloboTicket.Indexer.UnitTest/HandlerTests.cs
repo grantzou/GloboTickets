@@ -39,9 +39,22 @@ namespace GloboTicket.Indexer.UnitTest
         public async Task WhenActDescriptionIsChangedAfterShowIsAdded_ThenShowIsUpdated()
         {
             var showAdded = GivenShowAdded(actTitle: "Original Title", actDescriptionAge: 1);
-            await showAddedHandler.Handle(showAdded);
             var actDescriptionChanged = GivenActDescriptionChanged(actTitle: "Modified Title");
+
+            await showAddedHandler.Handle(showAdded);
             await actDescriptionChangedHandler.Handle(actDescriptionChanged);
+
+            repository.Shows.Single().act.description.title.Should().Be("Modified Title");
+        }
+
+        [Fact]
+        public async Task WhenActDescriptionChangeArrivesBeforeShowAdded_ThenShowUsesLatestDecsription()
+        {
+            var showAdded = GivenShowAdded(actTitle: "Original Title", actDescriptionAge: 1);
+            var actDescriptionChanged = GivenActDescriptionChanged(actTitle: "Modified Title");
+
+            await actDescriptionChangedHandler.Handle(actDescriptionChanged);
+            await showAddedHandler.Handle(showAdded);
 
             repository.Shows.Single().act.description.title.Should().Be("Modified Title");
         }

@@ -16,6 +16,16 @@ namespace GloboTicket.Indexer.Elasticsearch
             this.elasticClient = elasticClient;
         }
 
+        public Task<ActRepresentation> GetAct(Guid actGuid)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task IndexAct(ActRepresentation act)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task IndexShow(ShowAdded message)
         {
             var response = await elasticClient.IndexDocumentAsync(message);

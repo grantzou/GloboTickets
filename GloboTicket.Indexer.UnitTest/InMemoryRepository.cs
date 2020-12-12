@@ -11,8 +11,20 @@ namespace GloboTicket.Indexer.UnitTest
     class InMemoryRepository : IRepository
     {
         private IList<ShowAdded> shows = new List<ShowAdded>();
+        private IList<ActRepresentation> acts = new List<ActRepresentation>();
 
         public ICollection<ShowAdded> Shows => shows;
+
+        public async Task<ActRepresentation> GetAct(Guid actGuid)
+        {
+            return acts.SingleOrDefault(act => act.actGuid == actGuid);
+        }
+
+        public Task IndexAct(ActRepresentation act)
+        {
+            acts.Add(DeepCopy(act));
+            return Task.CompletedTask;
+        }
 
         public Task IndexShow(ShowAdded showAdded)
         {

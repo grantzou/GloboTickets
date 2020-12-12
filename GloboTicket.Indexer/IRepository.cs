@@ -9,5 +9,7 @@ namespace GloboTicket.Indexer
     {
         Task IndexShow(ShowAdded showAdded);
         Task UpdateShowsWithActDescription(Guid actGuid, ActDescriptionRepresentation description);
+        Task<ActRepresentation> GetAct(Guid actGuid);
+        Task IndexAct(ActRepresentation act);
     }
 }
