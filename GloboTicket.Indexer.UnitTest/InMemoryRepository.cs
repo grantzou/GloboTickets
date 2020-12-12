@@ -15,12 +15,12 @@ namespace GloboTicket.Indexer.UnitTest
 
         public Task<ActDocument> GetAct(string actGuid)
         {
-            return Task.FromResult(acts.SingleOrDefault(act => act.actGuid == actGuid));
+            return Task.FromResult(acts.SingleOrDefault(act => act.ActGuid == actGuid));
         }
 
         public Task IndexAct(ActDocument act)
         {
-            acts.RemoveAll(a => a.actGuid == act.actGuid);
+            acts.RemoveAll(a => a.ActGuid == act.ActGuid);
             acts.Add(DeepCopy(act));
             return Task.CompletedTask;
         }
@@ -28,18 +28,18 @@ namespace GloboTicket.Indexer.UnitTest
         public Task IndexShow(ShowDocument ShowDocument)
         {
             shows.RemoveAll(s =>
-                s.actGuid == ShowDocument.actGuid &&
-                s.venueGuid == ShowDocument.venueGuid &&
-                s.startTime == ShowDocument.startTime);
+                s.ActGuid == ShowDocument.ActGuid &&
+                s.VenueGuid == ShowDocument.VenueGuid &&
+                s.StartTime == ShowDocument.StartTime);
             shows.Add(DeepCopy(ShowDocument));
             return Task.CompletedTask;
         }
 
         public Task UpdateShowsWithActDescription(string actGuid, ActDescription actDescription)
         {
-            foreach (var show in shows.Where(s => s.actGuid == actGuid))
+            foreach (var show in shows.Where(s => s.ActGuid == actGuid))
             {
-                show.actDescription = DeepCopy(actDescription);
+                show.ActDescription = DeepCopy(actDescription);
             }
             return Task.CompletedTask;
         }

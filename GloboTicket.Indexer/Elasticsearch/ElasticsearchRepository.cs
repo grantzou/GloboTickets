@@ -2,7 +2,9 @@
 using GloboTicket.Indexer.Documents;
 using Nest;
 using System;
-using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace GloboTicket.Indexer.Elasticsearch
@@ -18,26 +20,22 @@ namespace GloboTicket.Indexer.Elasticsearch
 
         public async Task<ActDocument> GetAct(string actGuid)
         {
-            var response = await elasticClient.SearchAsync<ActDocument>(s => s
-                .Query(q => q
-                    .Match(m => m
-                        .Field(act => act.actGuid)
-                        .Query(actGuid)
-                    )
-                )
-            );
+            var id = HashOfKey(new { ActGuid = actGuid });
+            var response = await elasticClient.GetAsync<ActDocument>(id);
 
-            return response.Documents.SingleOrDefault();
+            return response.Found ? response.Source : null;
         }
 
-        public Task IndexAct(ActDocument act)
+        public async Task IndexAct(ActDocument act)
         {
-            throw new NotImplementedException();
+            act.Id = HashOfKey(new { ActGuid = act.ActGuid });
+            await elasticClient.IndexDocumentAsync(act);
         }
 
-        public async Task IndexShow(ShowDocument message)
+        public async Task IndexShow(ShowDocument show)
         {
-            var response = await elasticClient.IndexDocumentAsync(message);
+            show.Id = HashOfKey(new { ActGuid = show.ActGuid, VenueGuid = show.VenueGuid, StartTime = show.StartTime });
+            var response = await elasticClient.IndexDocumentAsync(show);
             if (!response.IsValid)
             {
                 throw new InvalidOperationException($"Error indexing show: {response.DebugInformation}");
@@ -49,7 +47,7 @@ namespace GloboTicket.Indexer.Elasticsearch
             await elasticClient.UpdateByQueryAsync<ShowDocument>(ubq => ubq
                 .Query(q => q
                     .Match(m => m
-                        .Field(f => f.actGuid)
+                        .Field(f => f.ActGuid)
                         .Query(actGuid)
                     )
                 )
@@ -62,6 +60,14 @@ namespace GloboTicket.Indexer.Elasticsearch
                 .Conflicts(Conflicts.Proceed)
                 .Refresh(true)
             );
+        }
+
+        private string HashOfKey(object key)
+        {
+            string json = JsonSerializer.Serialize(key);
+            var sha256 = SHA256.Create();
+            var hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(json));
+            return Convert.ToBase64String(hash);
         }
     }
 }

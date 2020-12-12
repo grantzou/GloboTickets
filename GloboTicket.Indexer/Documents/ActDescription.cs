@@ -5,17 +5,17 @@ namespace GloboTicket.Indexer.Documents
 {
     public class ActDescription
     {
-        public string title { get; set; }
-        public string imageHash { get; set; }
-        public DateTime modifiedDate { get; set; }
+        public string Title { get; set; }
+        public string ImageHash { get; set; }
+        public DateTime ModifiedDate { get; set; }
 
         public static ActDescription FromRepresentation(ActDescriptionRepresentation description)
         {
             return new ActDescription
             {
-                title = description.title,
-                imageHash = description.imageHash,
-                modifiedDate = description.modifiedDate
+                Title = description.title,
+                ImageHash = description.imageHash,
+                ModifiedDate = description.modifiedDate
             };
         }
     }

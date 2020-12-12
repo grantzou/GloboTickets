@@ -3,12 +3,12 @@
     public class ActDocument
     {
         // Hash of the alternate key
-        public string _id { get; set; }
+        public string Id { get; set; }
 
         // Alternate key
-        public string actGuid { get; set; }
+        public string ActGuid { get; set; }
 
         // Content
-        public ActDescription description { get; set; }
+        public ActDescription Description { get; set; }
     }
 }

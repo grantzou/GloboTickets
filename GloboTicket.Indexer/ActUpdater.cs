@@ -15,12 +15,12 @@ namespace GloboTicket.Indexer
         public async Task<ActDocument> UpdateAndGetLatestAct(string actGuid, ActDescription actDescription)
         {
             var act = await repository.GetAct(actGuid);
-            if (act == null || act.description.modifiedDate < actDescription.modifiedDate)
+            if (act == null || act.Description.ModifiedDate < actDescription.ModifiedDate)
             {
                 act = new ActDocument
                 {
-                    actGuid = actGuid,
-                    description = actDescription
+                    ActGuid = actGuid,
+                    Description = actDescription
                 };
                 await repository.IndexAct(act);
             }

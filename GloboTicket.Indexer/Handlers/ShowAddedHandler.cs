@@ -21,13 +21,22 @@ namespace GloboTicket.Indexer.Handlers
             Console.WriteLine($"Indexing a show for {showAdded.act.description.title} at {showAdded.venue.description.name}.");
             try
             {
-                string actGuid = showAdded.act.actGuid.ToString();
+                string actGuid = showAdded.act.actGuid.ToString().ToLower();
+                string venueGuid = showAdded.venue.venueGuid.ToString().ToLower();
+
                 ActDescription actDescription = ActDescription.FromRepresentation(showAdded.act.description);
+                VenueDescription venueDescription = VenueDescription.FromRepresentation(showAdded.venue.description);
+                VenueLocation venueLocation = VenueLocation.FromRepresentation(showAdded.venue.location);
+
                 ActDocument act = await actUpdater.UpdateAndGetLatestAct(actGuid, actDescription);
                 var show = new ShowDocument
                 {
-                    actGuid = act.actGuid,
-                    actDescription = act.description
+                    ActGuid = act.ActGuid,
+                    VenueGuid = venueGuid,
+                    StartTime = showAdded.show.startTime,
+                    ActDescription = act.Description,
+                    VenueDescription = venueDescription,
+                    VenueLocation = venueLocation
                 };
                 await repository.IndexShow(show);
                 Console.WriteLine("Succeeded");

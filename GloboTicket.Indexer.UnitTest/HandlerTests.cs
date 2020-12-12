@@ -33,7 +33,7 @@ namespace GloboTicket.Indexer.UnitTest
             var showAdded = GivenShowAdded(actTitle: "Expected act title");
             await showAddedHandler.Handle(showAdded);
 
-            repository.Shows.Single().actDescription.title.Should().Be("Expected act title");
+            repository.Shows.Single().ActDescription.Title.Should().Be("Expected act title");
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace GloboTicket.Indexer.UnitTest
             await showAddedHandler.Handle(showAdded);
             await actDescriptionChangedHandler.Handle(actDescriptionChanged);
 
-            repository.Shows.Single().actDescription.title.Should().Be("Modified Title");
+            repository.Shows.Single().ActDescription.Title.Should().Be("Modified Title");
         }
 
         [Fact]
@@ -57,7 +57,7 @@ namespace GloboTicket.Indexer.UnitTest
             await actDescriptionChangedHandler.Handle(actDescriptionChanged);
             await showAddedHandler.Handle(showAdded);
 
-            repository.Shows.Single().actDescription.title.Should().Be("Modified Title");
+            repository.Shows.Single().ActDescription.Title.Should().Be("Modified Title");
         }
 
         private ShowAdded GivenShowAdded(
@@ -91,6 +91,10 @@ namespace GloboTicket.Indexer.UnitTest
                         timeZone = "UTC",
                         modifiedDate = DateTime.UtcNow
                     }
+                },
+                show = new ShowRepresentation
+                {
+                    startTime = DateTimeOffset.Now
                 }
             };
         }
