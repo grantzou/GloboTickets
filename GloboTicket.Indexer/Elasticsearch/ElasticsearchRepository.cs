@@ -34,7 +34,7 @@ namespace GloboTicket.Indexer.Elasticsearch
 
         public async Task IndexShow(ShowDocument show)
         {
-            show.Id = HashOfKey(new { ActGuid = show.ActGuid, VenueGuid = show.VenueGuid, StartTime = show.StartTime });
+            show.Id = HashOfKey(new { ActGuid = show.ActGuid, StartTime = show.StartTime, VenueGuid = show.VenueGuid });
             var response = await elasticClient.IndexDocumentAsync(show);
             if (!response.IsValid)
             {
