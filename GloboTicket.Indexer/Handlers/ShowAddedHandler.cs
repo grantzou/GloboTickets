@@ -1,9 +1,9 @@
-﻿using GloboTicket.Promotion.Messages.Acts;
+﻿using GloboTicket.Indexer.Documents;
 using GloboTicket.Promotion.Messages.Shows;
 using System;
 using System.Threading.Tasks;
 
-namespace GloboTicket.Indexer
+namespace GloboTicket.Indexer.Handlers
 {
     public class ShowAddedHandler
     {
@@ -21,9 +21,15 @@ namespace GloboTicket.Indexer
             Console.WriteLine($"Indexing a show for {showAdded.act.description.title} at {showAdded.venue.description.name}.");
             try
             {
-                ActRepresentation act = await actUpdater.UpdateAndGetLatestAct(showAdded.act.actGuid, showAdded.act.description);
-                showAdded.act = act;
-                await repository.IndexShow(showAdded);
+                string actGuid = showAdded.act.actGuid.ToString();
+                ActDescription actDescription = ActDescription.FromRepresentation(showAdded.act.description);
+                ActDocument act = await actUpdater.UpdateAndGetLatestAct(actGuid, actDescription);
+                var show = new ShowDocument
+                {
+                    actGuid = act.actGuid,
+                    actDescription = act.description
+                };
+                await repository.IndexShow(show);
                 Console.WriteLine("Succeeded");
             }
             catch (Exception ex)

@@ -1,4 +1,6 @@
-﻿using GloboTicket.Indexer.Elasticsearch;
+﻿using GloboTicket.Indexer.Documents;
+using GloboTicket.Indexer.Elasticsearch;
+using GloboTicket.Indexer.Handlers;
 using GloboTicket.Promotion.Messages.Acts;
 using GloboTicket.Promotion.Messages.Shows;
 using GreenPipes;
@@ -14,7 +16,15 @@ namespace GloboTicket.Indexer
         static async Task Main(string[] args)
         {
             var settings = new ConnectionSettings(new Uri("http://localhost:9200"))
-                .DefaultIndex("shows");
+                .DefaultMappingFor<ShowDocument>(m => m
+                    .IndexName("shows")
+                )
+                .DefaultMappingFor<ActDocument>(m => m
+                    .IndexName("acts")
+                )
+                .DefaultMappingFor<VenueDocument>(m => m
+                    .IndexName("venues")
+                );
             var elasticClient = new ElasticClient(settings);
             var elasticsearchRepository = new ElasticsearchRepository(elasticClient);
             var actUpdater = new ActUpdater(elasticsearchRepository);

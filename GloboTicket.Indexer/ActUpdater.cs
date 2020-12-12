@@ -1,5 +1,4 @@
-﻿using GloboTicket.Promotion.Messages.Acts;
-using System;
+﻿using GloboTicket.Indexer.Documents;
 using System.Threading.Tasks;
 
 namespace GloboTicket.Indexer
@@ -13,15 +12,15 @@ namespace GloboTicket.Indexer
             this.repository = repository;
         }
 
-        public async Task<ActRepresentation> UpdateAndGetLatestAct(Guid actGuid, ActDescriptionRepresentation description)
+        public async Task<ActDocument> UpdateAndGetLatestAct(string actGuid, ActDescription actDescription)
         {
-            ActRepresentation act = await repository.GetAct(actGuid);
-            if (act == null || act.description.modifiedDate < description.modifiedDate)
+            var act = await repository.GetAct(actGuid);
+            if (act == null || act.description.modifiedDate < actDescription.modifiedDate)
             {
-                act = new ActRepresentation
+                act = new ActDocument
                 {
                     actGuid = actGuid,
-                    description = description
+                    description = actDescription
                 };
                 await repository.IndexAct(act);
             }

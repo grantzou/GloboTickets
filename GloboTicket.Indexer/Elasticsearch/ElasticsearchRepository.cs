@@ -1,8 +1,8 @@
 ﻿using Elasticsearch.Net;
-using GloboTicket.Promotion.Messages.Acts;
-using GloboTicket.Promotion.Messages.Shows;
+using GloboTicket.Indexer.Documents;
 using Nest;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GloboTicket.Indexer.Elasticsearch
@@ -16,17 +16,26 @@ namespace GloboTicket.Indexer.Elasticsearch
             this.elasticClient = elasticClient;
         }
 
-        public Task<ActRepresentation> GetAct(Guid actGuid)
+        public async Task<ActDocument> GetAct(string actGuid)
+        {
+            var response = await elasticClient.SearchAsync<ActDocument>(s => s
+                .Query(q => q
+                    .Match(m => m
+                        .Field(act => act.actGuid)
+                        .Query(actGuid)
+                    )
+                )
+            );
+
+            return response.Documents.SingleOrDefault();
+        }
+
+        public Task IndexAct(ActDocument act)
         {
             throw new NotImplementedException();
         }
 
-        public Task IndexAct(ActRepresentation act)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task IndexShow(ShowAdded message)
+        public async Task IndexShow(ShowDocument message)
         {
             var response = await elasticClient.IndexDocumentAsync(message);
             if (!response.IsValid)
@@ -35,19 +44,19 @@ namespace GloboTicket.Indexer.Elasticsearch
             }
         }
 
-        public async Task UpdateShowsWithActDescription(Guid actGuid, ActDescriptionRepresentation description)
+        public async Task UpdateShowsWithActDescription(string actGuid, ActDescription description)
         {
-            await elasticClient.UpdateByQueryAsync<ShowAdded>(ubq => ubq
+            await elasticClient.UpdateByQueryAsync<ShowDocument>(ubq => ubq
                 .Query(q => q
                     .Match(m => m
-                        .Field(f => f.act.actGuid)
-                        .Query(actGuid.ToString())
+                        .Field(f => f.actGuid)
+                        .Query(actGuid)
                     )
                 )
                 .Script(s => s
-                    .Source("ctx._source.act.description = params.description")
+                    .Source("ctx._source.actDescription = params.actDescription")
                     .Params(p => p
-                        .Add("description", description)
+                        .Add("actDescription", description)
                     )
                 )
                 .Conflicts(Conflicts.Proceed)

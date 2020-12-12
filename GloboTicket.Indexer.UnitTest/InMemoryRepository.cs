@@ -1,6 +1,4 @@
-﻿using GloboTicket.Promotion.Messages.Acts;
-using GloboTicket.Promotion.Messages.Shows;
-using System;
+﻿using GloboTicket.Indexer.Documents;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
@@ -10,33 +8,38 @@ namespace GloboTicket.Indexer.UnitTest
 {
     class InMemoryRepository : IRepository
     {
-        private IList<ShowAdded> shows = new List<ShowAdded>();
-        private IList<ActRepresentation> acts = new List<ActRepresentation>();
+        private List<ShowDocument> shows = new List<ShowDocument>();
+        private List<ActDocument> acts = new List<ActDocument>();
 
-        public ICollection<ShowAdded> Shows => shows;
+        public ICollection<ShowDocument> Shows => shows;
 
-        public Task<ActRepresentation> GetAct(Guid actGuid)
+        public Task<ActDocument> GetAct(string actGuid)
         {
             return Task.FromResult(acts.SingleOrDefault(act => act.actGuid == actGuid));
         }
 
-        public Task IndexAct(ActRepresentation act)
+        public Task IndexAct(ActDocument act)
         {
+            acts.RemoveAll(a => a.actGuid == act.actGuid);
             acts.Add(DeepCopy(act));
             return Task.CompletedTask;
         }
 
-        public Task IndexShow(ShowAdded showAdded)
+        public Task IndexShow(ShowDocument ShowDocument)
         {
-            shows.Add(DeepCopy(showAdded));
+            shows.RemoveAll(s =>
+                s.actGuid == ShowDocument.actGuid &&
+                s.venueGuid == ShowDocument.venueGuid &&
+                s.startTime == ShowDocument.startTime);
+            shows.Add(DeepCopy(ShowDocument));
             return Task.CompletedTask;
         }
 
-        public Task UpdateShowsWithActDescription(Guid actGuid, ActDescriptionRepresentation description)
+        public Task UpdateShowsWithActDescription(string actGuid, ActDescription actDescription)
         {
-            foreach (var show in shows.Where(s => s.act.actGuid == actGuid))
+            foreach (var show in shows.Where(s => s.actGuid == actGuid))
             {
-                show.act.description = DeepCopy(description);
+                show.actDescription = DeepCopy(actDescription);
             }
             return Task.CompletedTask;
         }

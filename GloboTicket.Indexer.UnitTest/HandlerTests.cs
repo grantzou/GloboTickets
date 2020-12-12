@@ -1,9 +1,9 @@
 using FluentAssertions;
+using GloboTicket.Indexer.Handlers;
 using GloboTicket.Promotion.Messages.Acts;
 using GloboTicket.Promotion.Messages.Shows;
 using GloboTicket.Promotion.Messages.Venues;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -30,10 +30,10 @@ namespace GloboTicket.Indexer.UnitTest
         [Fact]
         public async Task WhenShowIsAdded_ShowIsInIndex()
         {
-            var showAdded = GivenShowAdded();
+            var showAdded = GivenShowAdded(actTitle: "Expected act title");
             await showAddedHandler.Handle(showAdded);
 
-            repository.Shows.Should().BeEquivalentTo(new List<ShowAdded> { showAdded });
+            repository.Shows.Single().actDescription.title.Should().Be("Expected act title");
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace GloboTicket.Indexer.UnitTest
             await showAddedHandler.Handle(showAdded);
             await actDescriptionChangedHandler.Handle(actDescriptionChanged);
 
-            repository.Shows.Single().act.description.title.Should().Be("Modified Title");
+            repository.Shows.Single().actDescription.title.Should().Be("Modified Title");
         }
 
         [Fact]
@@ -57,7 +57,7 @@ namespace GloboTicket.Indexer.UnitTest
             await actDescriptionChangedHandler.Handle(actDescriptionChanged);
             await showAddedHandler.Handle(showAdded);
 
-            repository.Shows.Single().act.description.title.Should().Be("Modified Title");
+            repository.Shows.Single().actDescription.title.Should().Be("Modified Title");
         }
 
         private ShowAdded GivenShowAdded(
