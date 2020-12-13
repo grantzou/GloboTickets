@@ -35,7 +35,8 @@ namespace GloboTicket.Indexer.Handlers
                 VenueDocument venue = await venueUpdater.UpdateAndGetLatestVenue(new VenueDocument
                 {
                     VenueGuid = venueGuid,
-                    Description = venueDescription
+                    Description = venueDescription,
+                    Location = venueLocation
                 });
                 var show = new ShowDocument
                 {
@@ -44,7 +45,7 @@ namespace GloboTicket.Indexer.Handlers
                     StartTime = showAdded.show.startTime,
                     ActDescription = act.Description,
                     VenueDescription = venue.Description,
-                    VenueLocation = venueLocation
+                    VenueLocation = venue.Location
                 };
                 await repository.IndexShow(show);
                 Console.WriteLine("Succeeded");

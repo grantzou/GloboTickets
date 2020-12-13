@@ -57,6 +57,15 @@ namespace GloboTicket.Indexer.UnitTest
             return Task.CompletedTask;
         }
 
+        public Task UpdateShowsWithVenueLocation(string venueGuid, VenueLocation venueLocation)
+        {
+            foreach (var show in shows.Where(s => s.VenueGuid == venueGuid))
+            {
+                show.VenueLocation = DeepCopy(venueLocation);
+            }
+            return Task.CompletedTask;
+        }
+
         public Task UpdateShowsWithActDescription(string actGuid, ActDescription actDescription)
         {
             foreach (var show in shows.Where(s => s.ActGuid == actGuid))

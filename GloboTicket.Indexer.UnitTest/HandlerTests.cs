@@ -17,6 +17,7 @@ namespace GloboTicket.Indexer.UnitTest
         private readonly ShowAddedHandler showAddedHandler;
         private readonly ActDescriptionChangedHandler actDescriptionChangedHandler;
         private readonly VenueDescriptionChangedHandler venueDescriptionChangedHandler;
+        private readonly VenueLocationChangedHandler venueLocationChangedHandler;
 
         private readonly Guid actGuid = Guid.NewGuid();
         private readonly Guid venueGuid = Guid.NewGuid();
@@ -29,6 +30,7 @@ namespace GloboTicket.Indexer.UnitTest
             showAddedHandler = new ShowAddedHandler(repository, actUpdater, venueUpdater);
             actDescriptionChangedHandler = new ActDescriptionChangedHandler(repository, actUpdater);
             venueDescriptionChangedHandler = new VenueDescriptionChangedHandler(repository, venueUpdater);
+            venueLocationChangedHandler = new VenueLocationChangedHandler(repository, venueUpdater);
         }
 
         [Fact]
@@ -91,11 +93,37 @@ namespace GloboTicket.Indexer.UnitTest
             repository.Shows.Single().VenueDescription.Name.Should().Be("Modified Name");
         }
 
+        [Fact]
+        public async Task WhenVenueLocationIsChangedAfterShowIsAdded_ThenShowIsUpdated()
+        {
+            var showAdded = GivenShowAdded(latitude: 0.0f, venueLocationAge: 1);
+            var venueLocationChanged = GivenVenueLocationChanged(latitude: 45.0f);
+
+            await showAddedHandler.Handle(showAdded);
+            await venueLocationChangedHandler.Handle(venueLocationChanged);
+
+            repository.Shows.Single().VenueLocation.Latitude.Should().Be(45.0f);
+        }
+
+        [Fact]
+        public async Task WhenVenueLocationChangeArrivesBeforeAfterShowAdded_ThenShowUsesLatestLocation()
+        {
+            var showAdded = GivenShowAdded(latitude: 0.0f, venueLocationAge: 1);
+            var venueLocationChanged = GivenVenueLocationChanged(latitude: 45.0f);
+
+            await venueLocationChangedHandler.Handle(venueLocationChanged);
+            await showAddedHandler.Handle(showAdded);
+
+            repository.Shows.Single().VenueLocation.Latitude.Should().Be(45.0f);
+        }
+
         private ShowAdded GivenShowAdded(
             string actTitle = "New Act",
             int actDescriptionAge = 0,
             string venueName = "New Venue",
-            int venueDescriptionAge = 0)
+            int venueDescriptionAge = 0,
+            float latitude = 0.0f,
+            int venueLocationAge = 0)
         {
             return new ShowAdded
             {
@@ -108,12 +136,7 @@ namespace GloboTicket.Indexer.UnitTest
                 {
                     venueGuid = venueGuid,
                     description = GivenVenueDescription(venueName, venueDescriptionAge),
-                    location = new VenueLocationRepresentation
-                    {
-                        latitude = 123,
-                        longitude = -45,
-                        modifiedDate = DateTime.UtcNow
-                    },
+                    location = GivenVenueLocation(latitude, venueLocationAge),
                     timeZone = new VenueTimeZoneRepresentation
                     {
                         timeZone = "UTC",
@@ -124,29 +147,6 @@ namespace GloboTicket.Indexer.UnitTest
                 {
                     startTime = DateTimeOffset.Now
                 }
-            };
-        }
-
-        private ActDescriptionChanged GivenActDescriptionChanged(
-            string actTitle = "New Act",
-            int actDescriptionAge = 0)
-        {
-            return new ActDescriptionChanged
-            {
-                actGuid = actGuid,
-                description = GivenActDescription(actTitle, actDescriptionAge)
-            };
-        }
-
-        private static ActDescriptionRepresentation GivenActDescription(
-            string actTitle = "New Act",
-            int actDescriptionAge = 0)
-        {
-            return new ActDescriptionRepresentation
-            {
-                title = actTitle,
-                imageHash = "abc123",
-                modifiedDate = DateTime.UtcNow.AddDays(-actDescriptionAge)
             };
         }
 
@@ -161,6 +161,28 @@ namespace GloboTicket.Indexer.UnitTest
             };
         }
 
+        private VenueLocationChanged GivenVenueLocationChanged(
+            float latitude = 0.0f,
+            int venueLocationAge = 0)
+        {
+            return new VenueLocationChanged
+            {
+                venueGuid = venueGuid,
+                location = GivenVenueLocation(latitude, venueLocationAge)
+            };
+        }
+
+        private ActDescriptionChanged GivenActDescriptionChanged(
+            string actTitle = "New Act",
+            int actDescriptionAge = 0)
+        {
+            return new ActDescriptionChanged
+            {
+                actGuid = actGuid,
+                description = GivenActDescription(actTitle, actDescriptionAge)
+            };
+        }
+
         private static VenueDescriptionRepresentation GivenVenueDescription(
             string venueName,
             int venueDescriptionAge)
@@ -170,6 +192,30 @@ namespace GloboTicket.Indexer.UnitTest
                 name = venueName,
                 city = "Anytown, VA",
                 modifiedDate = DateTime.UtcNow.AddDays(-venueDescriptionAge)
+            };
+        }
+
+        private static VenueLocationRepresentation GivenVenueLocation(
+            float latitude,
+            int locationAge)
+        {
+            return new VenueLocationRepresentation
+            {
+                latitude = latitude,
+                longitude = -45,
+                modifiedDate = DateTime.UtcNow.AddDays(-locationAge)
+            };
+        }
+
+        private static ActDescriptionRepresentation GivenActDescription(
+            string actTitle,
+            int actDescriptionAge)
+        {
+            return new ActDescriptionRepresentation
+            {
+                title = actTitle,
+                imageHash = "abc123",
+                modifiedDate = DateTime.UtcNow.AddDays(-actDescriptionAge)
             };
         }
     }

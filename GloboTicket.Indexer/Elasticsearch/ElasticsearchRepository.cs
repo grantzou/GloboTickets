@@ -76,6 +76,26 @@ namespace GloboTicket.Indexer.Elasticsearch
             );
         }
 
+        public async Task UpdateShowsWithVenueLocation(string venueGuid, VenueLocation venueLocation)
+        {
+            await elasticClient.UpdateByQueryAsync<ShowDocument>(ubq => ubq
+                .Query(q => q
+                    .Match(m => m
+                        .Field(f => f.VenueGuid)
+                        .Query(venueGuid)
+                    )
+                )
+                .Script(s => s
+                    .Source("ctx._source.venueLocation = params.venueLocation")
+                    .Params(p => p
+                        .Add("venueLocation", venueLocation)
+                    )
+                )
+                .Conflicts(Conflicts.Proceed)
+                .Refresh(true)
+            );
+        }
+
         public async Task UpdateShowsWithActDescription(string actGuid, ActDescription actDescription)
         {
             await elasticClient.UpdateByQueryAsync<ShowDocument>(ubq => ubq
