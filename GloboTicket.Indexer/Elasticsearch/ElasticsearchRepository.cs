@@ -56,12 +56,27 @@ namespace GloboTicket.Indexer.Elasticsearch
             }
         }
 
-        public Task UpdateShowsWithVenueDescription(string venueGuid, VenueDescription venueDescription)
+        public async Task UpdateShowsWithVenueDescription(string venueGuid, VenueDescription venueDescription)
         {
-            throw new NotImplementedException();
+            await elasticClient.UpdateByQueryAsync<ShowDocument>(ubq => ubq
+                .Query(q => q
+                    .Match(m => m
+                        .Field(f => f.VenueGuid)
+                        .Query(venueGuid)
+                    )
+                )
+                .Script(s => s
+                    .Source("ctx._source.venueDescription = params.venueDescription")
+                    .Params(p => p
+                        .Add("venueDescription", venueDescription)
+                    )
+                )
+                .Conflicts(Conflicts.Proceed)
+                .Refresh(true)
+            );
         }
 
-        public async Task UpdateShowsWithActDescription(string actGuid, ActDescription description)
+        public async Task UpdateShowsWithActDescription(string actGuid, ActDescription actDescription)
         {
             await elasticClient.UpdateByQueryAsync<ShowDocument>(ubq => ubq
                 .Query(q => q
@@ -73,7 +88,7 @@ namespace GloboTicket.Indexer.Elasticsearch
                 .Script(s => s
                     .Source("ctx._source.actDescription = params.actDescription")
                     .Params(p => p
-                        .Add("actDescription", description)
+                        .Add("actDescription", actDescription)
                     )
                 )
                 .Conflicts(Conflicts.Proceed)
