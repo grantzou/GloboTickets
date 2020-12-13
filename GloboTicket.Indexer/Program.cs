@@ -34,6 +34,7 @@ namespace GloboTicket.Indexer
             var showAddedHandler = new ShowAddedHandler(elasticsearchRepository, actUpdater, venueUpdater);
             var actDescriptionChangedHandler = new ActDescriptionChangedHandler(elasticsearchRepository, actUpdater);
             var venueDescriptionChangedHandler = new VenueDescriptionChangedHandler(elasticsearchRepository, venueUpdater);
+            var venueLocationChangedHandler = new VenueLocationChangedHandler(elasticsearchRepository, venueUpdater);
 
             var bus = Bus.Factory.CreateUsingRabbitMq(busConfig =>
             {
@@ -52,6 +53,8 @@ namespace GloboTicket.Indexer
                         await actDescriptionChangedHandler.Handle(context.Message));
                     endpointConfig.Handler<VenueDescriptionChanged>(async context =>
                         await venueDescriptionChangedHandler.Handle(context.Message));
+                    endpointConfig.Handler<VenueLocationChanged>(async context =>
+                        await venueLocationChangedHandler.Handle(context.Message));
                 });
             });
 
