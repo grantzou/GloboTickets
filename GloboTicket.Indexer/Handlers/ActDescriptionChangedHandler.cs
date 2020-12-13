@@ -1,5 +1,4 @@
 ﻿using GloboTicket.Indexer.Documents;
-using GloboTicket.Indexer.Updaters;
 using GloboTicket.Promotion.Messages.Acts;
 using System;
 using System.Threading.Tasks;
@@ -9,12 +8,10 @@ namespace GloboTicket.Indexer.Handlers
     public class ActDescriptionChangedHandler
     {
         private readonly IRepository repository;
-        private readonly ActUpdater actUpdater;
 
-        public ActDescriptionChangedHandler(IRepository repository, ActUpdater actUpdater)
+        public ActDescriptionChangedHandler(IRepository repository)
         {
             this.repository = repository;
-            this.actUpdater = actUpdater;
         }
 
         public async Task Handle(ActDescriptionChanged actDescriptionChanged)
@@ -24,12 +21,7 @@ namespace GloboTicket.Indexer.Handlers
             {
                 string actGuid = actDescriptionChanged.actGuid.ToString().ToLower();
                 ActDescription actDescription = ActDescription.FromRepresentation(actDescriptionChanged.description);
-                ActDocument act = await actUpdater.UpdateAndGetLatestAct(new ActDocument
-                {
-                    ActGuid = actGuid,
-                    Description = actDescription
-                });
-                await repository.UpdateShowsWithActDescription(act.ActGuid, act.Description);
+                await repository.UpdateShowsWithActDescription(actGuid, actDescription);
                 Console.WriteLine("Succeeded");
             }
             catch (Exception ex)

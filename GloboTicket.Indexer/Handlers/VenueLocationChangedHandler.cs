@@ -1,5 +1,4 @@
 ﻿using GloboTicket.Indexer.Documents;
-using GloboTicket.Indexer.Updaters;
 using GloboTicket.Promotion.Messages.Venues;
 using System;
 using System.Threading.Tasks;
@@ -9,12 +8,10 @@ namespace GloboTicket.Indexer.Handlers
     public class VenueLocationChangedHandler
     {
         private readonly IRepository repository;
-        private readonly VenueUpdater venueUpdater;
 
-        public VenueLocationChangedHandler(IRepository repository, VenueUpdater venueUpdater)
+        public VenueLocationChangedHandler(IRepository repository)
         {
             this.repository = repository;
-            this.venueUpdater = venueUpdater;
         }
 
         public async Task Handle(VenueLocationChanged venueLocationChanged)
@@ -24,13 +21,8 @@ namespace GloboTicket.Indexer.Handlers
             {
                 string venueGuid = venueLocationChanged.venueGuid.ToString().ToLower();
                 VenueLocation venueLocation = VenueLocation.FromRepresentation(venueLocationChanged.location);
-                VenueDocument updatedVenue = new VenueDocument
-                {
-                    VenueGuid = venueGuid,
-                    Location = venueLocation
-                };
-                VenueDocument venue = await venueUpdater.UpdateAndGetLatestVenue(updatedVenue);
-                await repository.UpdateShowsWithVenueLocation(venue.VenueGuid, venue.Location);
+
+                await repository.UpdateShowsWithVenueLocation(venueGuid, venueLocation);
                 Console.WriteLine("Succeeded");
             }
             catch (Exception ex)

@@ -1,5 +1,4 @@
 ﻿using GloboTicket.Indexer.Documents;
-using GloboTicket.Indexer.Updaters;
 using GloboTicket.Promotion.Messages.Shows;
 using System;
 using System.Threading.Tasks;
@@ -9,14 +8,10 @@ namespace GloboTicket.Indexer.Handlers
     public class ShowAddedHandler
     {
         private readonly IRepository repository;
-        private readonly ActUpdater actUpdater;
-        private readonly VenueUpdater venueUpdater;
 
-        public ShowAddedHandler(IRepository repository, ActUpdater actUpdater, VenueUpdater venueUpdater)
+        public ShowAddedHandler(IRepository repository)
         {
             this.repository = repository;
-            this.actUpdater = actUpdater;
-            this.venueUpdater = venueUpdater;
         }
 
         public async Task Handle(ShowAdded showAdded)
@@ -31,25 +26,14 @@ namespace GloboTicket.Indexer.Handlers
                 VenueDescription venueDescription = VenueDescription.FromRepresentation(showAdded.venue.description);
                 VenueLocation venueLocation = VenueLocation.FromRepresentation(showAdded.venue.location);
 
-                ActDocument act = await actUpdater.UpdateAndGetLatestAct(new ActDocument
-                {
-                    ActGuid = actGuid,
-                    Description = actDescription
-                });
-                VenueDocument venue = await venueUpdater.UpdateAndGetLatestVenue(new VenueDocument
-                {
-                    VenueGuid = venueGuid,
-                    Description = venueDescription,
-                    Location = venueLocation
-                });
                 var show = new ShowDocument
                 {
-                    ActGuid = act.ActGuid,
-                    VenueGuid = venue.VenueGuid,
+                    ActGuid = actGuid,
+                    VenueGuid = venueGuid,
                     StartTime = showAdded.show.startTime,
-                    ActDescription = act.Description,
-                    VenueDescription = venue.Description,
-                    VenueLocation = venue.Location
+                    ActDescription = actDescription,
+                    VenueDescription = venueDescription,
+                    VenueLocation = venueLocation
                 };
                 await repository.IndexShow(show);
                 Console.WriteLine("Succeeded");
