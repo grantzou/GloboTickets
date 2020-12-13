@@ -100,9 +100,19 @@ namespace GloboTicket.Indexer.Elasticsearch
         {
             await elasticClient.UpdateByQueryAsync<ShowDocument>(ubq => ubq
                 .Query(q => q
-                    .Match(m => m
-                        .Field(f => f.ActGuid)
-                        .Query(actGuid)
+                    .Bool(b => b
+                        .Must(m => m
+                            .Match(m => m
+                                .Field(f => f.ActGuid)
+                                .Query(actGuid)
+                            )
+                        )
+                        .Must(m => m
+                            .DateRange(dr => dr
+                                .Field(f => f.ActDescription.ModifiedDate)
+                                .LessThan(actDescription.ModifiedDate)
+                            )
+                        )
                     )
                 )
                 .Script(s => s
