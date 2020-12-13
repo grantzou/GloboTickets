@@ -16,6 +16,7 @@ namespace GloboTicket.Indexer.UnitTest
         private readonly InMemoryRepository repository;
         private readonly ShowAddedHandler showAddedHandler;
         private readonly ActDescriptionChangedHandler actDescriptionChangedHandler;
+        private readonly VenueDescriptionChangedHandler venueDescriptionChangedHandler;
 
         private readonly Guid actGuid = Guid.NewGuid();
         private readonly Guid venueGuid = Guid.NewGuid();
@@ -25,18 +26,21 @@ namespace GloboTicket.Indexer.UnitTest
             repository = new InMemoryRepository();
             var actUpdater = new ActUpdater(repository);
             var venueUpdater = new VenueUpdater(repository);
-            showAddedHandler = new ShowAddedHandler(repository, actUpdater);
+            showAddedHandler = new ShowAddedHandler(repository, actUpdater, venueUpdater);
             actDescriptionChangedHandler = new ActDescriptionChangedHandler(repository, actUpdater);
-            var venueDescriptionChangedHandler = new VenueDescriptionChangedHandler(repository, venueUpdater);
+            venueDescriptionChangedHandler = new VenueDescriptionChangedHandler(repository, venueUpdater);
         }
 
         [Fact]
         public async Task WhenShowIsAdded_ShowIsInIndex()
         {
-            var showAdded = GivenShowAdded(actTitle: "Expected act title");
+            var showAdded = GivenShowAdded(
+                actTitle: "Expected act title",
+                venueName: "Expected venue name");
             await showAddedHandler.Handle(showAdded);
 
             repository.Shows.Single().ActDescription.Title.Should().Be("Expected act title");
+            repository.Shows.Single().VenueDescription.Name.Should().Be("Expected venue name");
         }
 
         [Fact]
@@ -63,9 +67,35 @@ namespace GloboTicket.Indexer.UnitTest
             repository.Shows.Single().ActDescription.Title.Should().Be("Modified Title");
         }
 
+        [Fact]
+        public async Task WhenVenueDescriptionIsChangedAfterShowIsAdded_ThenShowIsUpdated()
+        {
+            var showAdded = GivenShowAdded(venueName: "Original Name", venueDescriptionAge: 1);
+            var venueDescriptionChanged = GivenVenueDescriptionChanged(venueName: "Modified Name");
+
+            await showAddedHandler.Handle(showAdded);
+            await venueDescriptionChangedHandler.Handle(venueDescriptionChanged);
+
+            repository.Shows.Single().VenueDescription.Name.Should().Be("Modified Name");
+        }
+
+        [Fact]
+        public async Task WhenVenueDescriptionChangeArrivesBeforeAfterShowAdded_ThenShowUsesLatestDescription()
+        {
+            var showAdded = GivenShowAdded(venueName: "Original Name", venueDescriptionAge: 1);
+            var venueDescriptionChanged = GivenVenueDescriptionChanged(venueName: "Modified Name");
+
+            await venueDescriptionChangedHandler.Handle(venueDescriptionChanged);
+            await showAddedHandler.Handle(showAdded);
+
+            repository.Shows.Single().VenueDescription.Name.Should().Be("Modified Name");
+        }
+
         private ShowAdded GivenShowAdded(
             string actTitle = "New Act",
-            int actDescriptionAge = 0)
+            int actDescriptionAge = 0,
+            string venueName = "New Venue",
+            int venueDescriptionAge = 0)
         {
             return new ShowAdded
             {
@@ -77,12 +107,7 @@ namespace GloboTicket.Indexer.UnitTest
                 venue = new VenueRepresentation
                 {
                     venueGuid = venueGuid,
-                    description = new VenueDescriptionRepresentation
-                    {
-                        name = "New Venue",
-                        city = "Anytown, VA",
-                        modifiedDate = DateTime.UtcNow
-                    },
+                    description = GivenVenueDescription(venueName, venueDescriptionAge),
                     location = new VenueLocationRepresentation
                     {
                         latitude = 123,
@@ -122,6 +147,29 @@ namespace GloboTicket.Indexer.UnitTest
                 title = actTitle,
                 imageHash = "abc123",
                 modifiedDate = DateTime.UtcNow.AddDays(-actDescriptionAge)
+            };
+        }
+
+        private VenueDescriptionChanged GivenVenueDescriptionChanged(
+            string venueName = "New Venue",
+            int venueDescriptionAge = 0)
+        {
+            return new VenueDescriptionChanged
+            {
+                venueGuid = venueGuid,
+                description = GivenVenueDescription(venueName, venueDescriptionAge)
+            };
+        }
+
+        private static VenueDescriptionRepresentation GivenVenueDescription(
+            string venueName,
+            int venueDescriptionAge)
+        {
+            return new VenueDescriptionRepresentation
+            {
+                name = venueName,
+                city = "Anytown, VA",
+                modifiedDate = DateTime.UtcNow.AddDays(-venueDescriptionAge)
             };
         }
     }

@@ -9,13 +9,14 @@ namespace GloboTicket.Indexer.UnitTest
     class InMemoryRepository : IRepository
     {
         private List<ShowDocument> shows = new List<ShowDocument>();
+        private List<VenueDocument> venues = new List<VenueDocument>();
         private List<ActDocument> acts = new List<ActDocument>();
 
         public ICollection<ShowDocument> Shows => shows;
 
         public Task<VenueDocument> GetVenue(string venueGuid)
         {
-            throw new System.NotImplementedException();
+            return Task.FromResult(venues.SingleOrDefault(venue => venue.VenueGuid == venueGuid));
         }
 
         public Task<ActDocument> GetAct(string actGuid)
@@ -25,7 +26,9 @@ namespace GloboTicket.Indexer.UnitTest
 
         public Task IndexVenue(VenueDocument venue)
         {
-            throw new System.NotImplementedException();
+            venues.RemoveAll(v => v.VenueGuid == venue.VenueGuid);
+            venues.Add(DeepCopy(venue));
+            return Task.CompletedTask;
         }
 
         public Task IndexAct(ActDocument act)
@@ -45,9 +48,13 @@ namespace GloboTicket.Indexer.UnitTest
             return Task.CompletedTask;
         }
 
-        public Task UpdateShowsWithVenueDescription(string venueGuid, VenueDescription description)
+        public Task UpdateShowsWithVenueDescription(string venueGuid, VenueDescription venueDescription)
         {
-            throw new System.NotImplementedException();
+            foreach (var show in shows.Where(s => s.VenueGuid == venueGuid))
+            {
+                show.VenueDescription = DeepCopy(venueDescription);
+            }
+            return Task.CompletedTask;
         }
 
         public Task UpdateShowsWithActDescription(string actGuid, ActDescription actDescription)

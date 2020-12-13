@@ -10,11 +10,13 @@ namespace GloboTicket.Indexer.Handlers
     {
         private readonly IRepository repository;
         private readonly ActUpdater actUpdater;
+        private readonly VenueUpdater venueUpdater;
 
-        public ShowAddedHandler(IRepository repository, ActUpdater actUpdater)
+        public ShowAddedHandler(IRepository repository, ActUpdater actUpdater, VenueUpdater venueUpdater)
         {
             this.repository = repository;
             this.actUpdater = actUpdater;
+            this.venueUpdater = venueUpdater;
         }
 
         public async Task Handle(ShowAdded showAdded)
@@ -30,13 +32,18 @@ namespace GloboTicket.Indexer.Handlers
                 VenueLocation venueLocation = VenueLocation.FromRepresentation(showAdded.venue.location);
 
                 ActDocument act = await actUpdater.UpdateAndGetLatestAct(actGuid, actDescription);
+                VenueDocument venue = await venueUpdater.UpdateAndGetLatestVenue(new VenueDocument
+                {
+                    VenueGuid = venueGuid,
+                    Description = venueDescription
+                });
                 var show = new ShowDocument
                 {
                     ActGuid = act.ActGuid,
-                    VenueGuid = venueGuid,
+                    VenueGuid = venue.VenueGuid,
                     StartTime = showAdded.show.startTime,
                     ActDescription = act.Description,
-                    VenueDescription = venueDescription,
+                    VenueDescription = venue.Description,
                     VenueLocation = venueLocation
                 };
                 await repository.IndexShow(show);

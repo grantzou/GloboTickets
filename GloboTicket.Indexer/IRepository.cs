@@ -12,7 +12,7 @@ namespace GloboTicket.Indexer
         Task IndexAct(ActDocument act);
         Task IndexShow(ShowDocument show);
 
-        Task UpdateShowsWithVenueDescription(string venueGuid, VenueDescription description);
+        Task UpdateShowsWithVenueDescription(string venueGuid, VenueDescription venueDescription);
         Task UpdateShowsWithActDescription(string actGuid, ActDescription actDescription);
     }
 }

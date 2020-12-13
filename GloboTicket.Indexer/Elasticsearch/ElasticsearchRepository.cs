@@ -56,7 +56,7 @@ namespace GloboTicket.Indexer.Elasticsearch
             }
         }
 
-        public Task UpdateShowsWithVenueDescription(string venueGuid, VenueDescription description)
+        public Task UpdateShowsWithVenueDescription(string venueGuid, VenueDescription venueDescription)
         {
             throw new NotImplementedException();
         }
