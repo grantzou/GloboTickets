@@ -31,7 +31,11 @@ namespace GloboTicket.Indexer.Handlers
                 VenueDescription venueDescription = VenueDescription.FromRepresentation(showAdded.venue.description);
                 VenueLocation venueLocation = VenueLocation.FromRepresentation(showAdded.venue.location);
 
-                ActDocument act = await actUpdater.UpdateAndGetLatestAct(actGuid, actDescription);
+                ActDocument act = await actUpdater.UpdateAndGetLatestAct(new ActDocument
+                {
+                    ActGuid = actGuid,
+                    Description = actDescription
+                });
                 VenueDocument venue = await venueUpdater.UpdateAndGetLatestVenue(new VenueDocument
                 {
                     VenueGuid = venueGuid,

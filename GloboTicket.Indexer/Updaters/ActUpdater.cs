@@ -12,16 +12,28 @@ namespace GloboTicket.Indexer.Updaters
             this.repository = repository;
         }
 
-        public async Task<ActDocument> UpdateAndGetLatestAct(string actGuid, ActDescription actDescription)
+        public async Task<ActDocument> UpdateAndGetLatestAct(ActDocument updatedAct)
         {
-            var act = await repository.GetAct(actGuid);
-            if (act == null || act.Description.ModifiedDate < actDescription.ModifiedDate)
+            var act = await repository.GetAct(updatedAct.ActGuid);
+            bool shouldUpdate = false;
+            if (act == null)
             {
-                act = new ActDocument
+                act = updatedAct;
+                shouldUpdate = true;
+            }
+            else
+            {
+                if (
+                    updatedAct.Description != null &&
+                    (act.Description == null ||
+                     act.Description.ModifiedDate < updatedAct.Description.ModifiedDate))
                 {
-                    ActGuid = actGuid,
-                    Description = actDescription
-                };
+                    act.Description = updatedAct.Description;
+                    shouldUpdate = true;
+                }
+            }
+            if (shouldUpdate)
+            {
                 await repository.IndexAct(act);
             }
 

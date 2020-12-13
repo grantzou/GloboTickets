@@ -24,7 +24,11 @@ namespace GloboTicket.Indexer.Handlers
             {
                 string actGuid = actDescriptionChanged.actGuid.ToString().ToLower();
                 ActDescription actDescription = ActDescription.FromRepresentation(actDescriptionChanged.description);
-                ActDocument act = await actUpdater.UpdateAndGetLatestAct(actGuid, actDescription);
+                ActDocument act = await actUpdater.UpdateAndGetLatestAct(new ActDocument
+                {
+                    ActGuid = actGuid,
+                    Description = actDescription
+                });
                 await repository.UpdateShowsWithActDescription(act.ActGuid, act.Description);
                 Console.WriteLine("Succeeded");
             }
