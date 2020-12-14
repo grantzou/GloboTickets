@@ -1,4 +1,4 @@
-﻿using Elasticsearch.Net;
+using Elasticsearch.Net;
 using GloboTicket.Indexer.Documents;
 using Nest;
 using System;

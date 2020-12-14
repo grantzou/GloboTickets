@@ -1,4 +1,4 @@
-﻿using GloboTicket.Indexer.Documents;
+using GloboTicket.Indexer.Documents;
 using GloboTicket.Indexer.Updaters;
 using GloboTicket.Promotion.Messages.Shows;
 using System;
@@ -10,11 +10,13 @@ namespace GloboTicket.Indexer.Handlers
     {
         private readonly IRepository repository;
         private readonly ActUpdater actUpdater;
+        private readonly VenueUpdater venueUpdater;
 
-        public ShowAddedHandler(IRepository repository, ActUpdater actUpdater)
+        public ShowAddedHandler(IRepository repository, ActUpdater actUpdater, VenueUpdater venueUpdater)
         {
             this.repository = repository;
             this.actUpdater = actUpdater;
+            this.venueUpdater = venueUpdater;
         }
 
         public async Task Handle(ShowAdded showAdded)
@@ -34,15 +36,20 @@ namespace GloboTicket.Indexer.Handlers
                     ActGuid = actGuid,
                     Description = actDescription
                 });
-
+                VenueDocument venue = await venueUpdater.UpdateAndGetLatestVenue(new VenueDocument
+                {
+                    VenueGuid = venueGuid,
+                    Description = venueDescription,
+                    Location = venueLocation
+                });
                 var show = new ShowDocument
                 {
                     ActGuid = actGuid,
                     VenueGuid = venueGuid,
                     StartTime = showAdded.show.startTime,
                     ActDescription = act.Description,
-                    VenueDescription = venueDescription,
-                    VenueLocation = venueLocation
+                    VenueDescription = venue.Description,
+                    VenueLocation = venue.Location
                 };
                 await repository.IndexShow(show);
                 Console.WriteLine("Succeeded");
