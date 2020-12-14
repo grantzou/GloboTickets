@@ -31,8 +31,8 @@ namespace GloboTicket.Indexer
             var elasticsearchRepository = new ElasticsearchRepository(elasticClient);
             var actUpdater = new ActUpdater(elasticsearchRepository);
             var venueUpdater = new VenueUpdater(elasticsearchRepository);
-            var showAddedHandler = new ShowAddedHandler(elasticsearchRepository);
-            var actDescriptionChangedHandler = new ActDescriptionChangedHandler(elasticsearchRepository);
+            var showAddedHandler = new ShowAddedHandler(elasticsearchRepository, actUpdater);
+            var actDescriptionChangedHandler = new ActDescriptionChangedHandler(elasticsearchRepository, actUpdater);
             var venueDescriptionChangedHandler = new VenueDescriptionChangedHandler(elasticsearchRepository);
             var venueLocationChangedHandler = new VenueLocationChangedHandler(elasticsearchRepository);
 
