@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GloboTicket.Purchasing.Messages.Offers
+namespace GloboTicket.Sales.Messages.Offers
 {
     public class OfferRepresentation
     {

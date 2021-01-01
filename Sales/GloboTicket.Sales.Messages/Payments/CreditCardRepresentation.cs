@@ -1,4 +1,4 @@
-﻿namespace GloboTicket.Purchasing.Messages.Payments
+﻿namespace GloboTicket.Sales.Messages.Payments
 {
     public class CreditCardRepresentation
     {

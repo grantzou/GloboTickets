@@ -1,7 +1,7 @@
-﻿using GloboTicket.Purchasing.Messages.Offers;
-using GloboTicket.Purchasing.Messages.Payments;
+﻿using GloboTicket.Sales.Messages.Offers;
+using GloboTicket.Sales.Messages.Payments;
 
-namespace GloboTicket.Purchasing.Messages.Purchases
+namespace GloboTicket.Sales.Messages.Purchases
 {
     public class PurchaseTicket
     {
