@@ -34,6 +34,7 @@ steps:
     configuration: '$(buildConfiguration)'
 
 - task: NuGetCommand@2
+  displayName: "Package Messages project"
   inputs:
     command: 'pack'
     packagesToPack: 'Sales/**/*.Messages.csproj'
@@ -45,7 +46,10 @@ steps:
     ArtifactName: 'drop'
     publishLocation: 'Container'
 
+- task: NuGetAuthenticate@0
+
 - task: NuGetCommand@2
+  displayName: "Publish NuGet Packages"
   inputs:
     command: 'push'
     packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
