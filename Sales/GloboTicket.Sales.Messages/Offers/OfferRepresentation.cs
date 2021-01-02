@@ -4,6 +4,7 @@ namespace GloboTicket.Sales.Messages.Offers
 {
     public class OfferRepresentation
     {
+        public Guid offerGuid { get; set; }
         public Guid actGuid { get; set; }
         public Guid venueGuid { get; set; }
         public DateTimeOffset startTime { get; set; }

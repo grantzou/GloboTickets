@@ -21,9 +21,12 @@ namespace GloboTicket.WebSales.Pages
 
         public IActionResult OnGet()
         {
+            Offer = CreateOffer();
             return Page();
         }
 
+        [BindProperty]
+        public OfferRepresentation Offer { get; set; }
         [BindProperty]
         public Purchase Purchase { get; set; }
 
@@ -37,20 +40,10 @@ namespace GloboTicket.WebSales.Pages
 
             await salesEndpoint.Publish(new PurchaseTicket
             {
-                offer = new OfferRepresentation
-                {
-                    actGuid = Guid.NewGuid(),
-                    venueGuid = Guid.NewGuid(),
-                    startTime = new DateTimeOffset(2021, 1, 21, 19, 0, 0, 0, new TimeSpan(-5, 0, 0)),
-                    createdDate = DateTime.UtcNow,
-                    expirationDate = DateTime.UtcNow.AddMinutes(30),
-                    minimumQuantity = 1,
-                    maximumQuantity = 4,
-                    unitPrice = 65.00m
-                },
+                offer = Offer,
                 order = new OrderRepresentation
                 {
-                    Quantity = Purchase.Quantity
+                    quantity = Purchase.Quantity
                 },
                 creditCardPayment = new CreditCardRepresentation
                 {
@@ -63,6 +56,22 @@ namespace GloboTicket.WebSales.Pages
             });
 
             return RedirectToPage("./Index");
+        }
+
+        private static OfferRepresentation CreateOffer()
+        {
+            return new OfferRepresentation
+            {
+                offerGuid = Guid.NewGuid(),
+                actGuid = Guid.NewGuid(),
+                venueGuid = Guid.NewGuid(),
+                startTime = new DateTimeOffset(2021, 1, 21, 19, 0, 0, 0, new TimeSpan(-5, 0, 0)),
+                createdDate = DateTime.UtcNow,
+                expirationDate = DateTime.UtcNow.AddMinutes(30),
+                minimumQuantity = 1,
+                maximumQuantity = 4,
+                unitPrice = 65.00m
+            };
         }
     }
 }
