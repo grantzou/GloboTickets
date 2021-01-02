@@ -17,8 +17,4 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Sales\GloboTicket.Sales.Messages\GloboTicket.Sales.Messages.csproj" />
-  </ItemGroup>
-
 </Project>
