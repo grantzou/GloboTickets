@@ -10,7 +10,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: '**/*.sln'
+  solution: '**/Sales.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
@@ -36,5 +36,5 @@ steps:
 - task: NuGetCommand@2
   inputs:
     command: 'pack'
-    packagesToPack: '**/*.Messages.csproj'
+    packagesToPack: 'Sales/**/*.Messages.csproj'
     versioningScheme: 'off'
