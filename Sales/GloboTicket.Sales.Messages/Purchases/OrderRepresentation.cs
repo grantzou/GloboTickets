@@ -2,6 +2,6 @@
 {
     public class OrderRepresentation
     {
-        public int Quantity { get; set; }
+        public int quantity { get; set; }
     }
 }

@@ -18,7 +18,7 @@ namespace GloboTicket.Sales
                     endpointConfig.Handler<PurchaseTicket>(async context =>
                     {
                         var handler = new PurchaseTicketHandler();
-                        await handler.Handle(context.Message);
+                        await handler.Handle(context);
                     });
                 });
             });

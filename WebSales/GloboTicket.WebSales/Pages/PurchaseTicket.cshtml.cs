@@ -37,7 +37,6 @@ namespace GloboTicket.WebSales.Pages
 
             await salesEndpoint.Publish(new PurchaseTicket
             {
-                commandId = Guid.NewGuid(),
                 offer = new OfferRepresentation
                 {
                     actGuid = Guid.NewGuid(),
