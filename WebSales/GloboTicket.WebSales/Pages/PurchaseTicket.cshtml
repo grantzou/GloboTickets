@@ -53,6 +53,15 @@
                 <input asp-for="Purchase.ExpirationYear" class="form-control" />
                 <span asp-validation-for="Purchase.ExpirationYear" class="text-danger"></span>
             </div>
+            <input asp-for="Offer.offerGuid" type="hidden" />
+            <input asp-for="Offer.actGuid" type="hidden" />
+            <input asp-for="Offer.venueGuid" type="hidden" />
+            <input asp-for="Offer.startTime" type="hidden" />
+            <input asp-for="Offer.createdDate" type="hidden" />
+            <input asp-for="Offer.unitPrice" type="hidden" />
+            <input asp-for="Offer.minimumQuantity" type="hidden" />
+            <input asp-for="Offer.maximumQuantity" type="hidden" />
+            <input asp-for="Offer.expirationDate" type="hidden" />
             <div class="form-group">
                 <input type="submit" value="PLACE ORDER" class="btn btn-primary" />
             </div>
