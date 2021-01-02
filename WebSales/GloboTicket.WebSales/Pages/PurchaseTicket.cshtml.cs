@@ -48,8 +48,8 @@ namespace GloboTicket.WebSales.Pages
                 creditCardPayment = new CreditCardRepresentation
                 {
                     creditCardNumber = Purchase.CreditCardNumber,
-                    name = Purchase.NameOnCard,
                     cvv = Purchase.VerificationCode,
+                    name = Purchase.NameOnCard,
                     expirationMonth = Purchase.ExpirationMonth,
                     expirationYear = Purchase.ExpirationYear
                 }
