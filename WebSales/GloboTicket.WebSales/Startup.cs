@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MassTransit;
 
 namespace GloboTicket.WebSales
 {
@@ -19,6 +20,11 @@ namespace GloboTicket.WebSales
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+
+            services.AddMassTransit(x =>
+            {
+                x.UsingRabbitMq();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
