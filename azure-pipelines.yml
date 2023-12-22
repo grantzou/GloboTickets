@@ -6,7 +6,8 @@
 trigger:
 - main
 
-pool: grants-hpbox
+pool:
+  vmImage: 'windows-latest'
 
 variables:
   solution: '**/Sales.sln'
